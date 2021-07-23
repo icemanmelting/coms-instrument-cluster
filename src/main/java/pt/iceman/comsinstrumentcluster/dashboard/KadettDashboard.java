@@ -481,7 +481,7 @@ public class KadettDashboard extends Dashboard {
         camera.setNearClip(0.1);
         camera.setFarClip(200);
 
-        Group model = loadModel("C:\\Users\\iCeMan\\Desktop\\Opel_Kadett_E_Hatchback_3door_1991.3ds");
+        Group model = loadModel();
         model.getTransforms().add(new Scale(0.1, 0.1, 0.1));
 
         SubScene subScene = new SubScene(model, 1920, 720, true, SceneAntialiasing.BALANCED);
@@ -491,11 +491,11 @@ public class KadettDashboard extends Dashboard {
         return subScene;
     }
 
-    private Group loadModel(String url) {
+    private Group loadModel() {
         Group modelRoot = new Group();
 
         TdsModelImporter importer = new TdsModelImporter();
-        importer.read(url);
+        importer.read(getClass().getClassLoader().getResource("Opel_Kadett_E_Hatchback_3door_1991.3ds"));
 
         Node[] meshes = importer.getImport();
 
