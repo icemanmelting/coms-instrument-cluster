@@ -9,7 +9,9 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -28,30 +30,58 @@ import java.util.Map;
 public class KadettDashboard extends Dashboard {
     private Map<Double, Image> gearMapping;
     private Map<Integer, Image> temperatureFuelMapping;
-
+    private PerspectiveCamera camera;
+    private SubScene subscene;
 
     public KadettDashboard() {
         super();
     }
 
+    private void initCamera() {
+        this.camera = new PerspectiveCamera(true);
+        this.camera.setFieldOfView(45);
+        this.camera.getTransforms().addAll(
+                new Rotate(45, new Point3D(-0.2505628070857316, -0.9351131265310294, -0.25056280708573153)),
+                new Rotate(0, Rotate.Y_AXIS),
+                new Rotate(0, Rotate.Z_AXIS),
+                new Translate(0, -10, 0),
+                new Translate(0, 0, -80) //-80
+        );
+
+        this.camera.setNearClip(0.1);
+        this.camera.setFarClip(200);
+    }
+
+    private void initSubscene() {
+        System.out.println("I was here");
+        Group model = loadModel();
+        model.getTransforms().add(new Scale(0.1, 0.1, 0.1));
+
+        this.subscene = new SubScene(model, 1920, 720, true, SceneAntialiasing.BALANCED);
+        this.subscene.setCamera(this.camera);
+    }
+
     @Override
     public void configureInstruments() {
-//        gearMapping = new HashMap<Double, Image>(7) {{
-//            put(0d, new Image(getClass().getResourceAsStream(Gear.Neutral.getFieldValue())));
-//            put(1d, new Image(getClass().getResourceAsStream(Gear.First.getFieldValue())));
-//            put(2d, new Image(getClass().getResourceAsStream(Gear.Second.getFieldValue())));
-//            put(3d, new Image(getClass().getResourceAsStream(Gear.Third.getFieldValue())));
-//            put(4d, new Image(getClass().getResourceAsStream(Gear.Forth.getFieldValue())));
-//            put(5d, new Image(getClass().getResourceAsStream(Gear.Fifth.getFieldValue())));
-//            put(6d, new Image(getClass().getResourceAsStream(Gear.Reverse.getFieldValue())));
-//        }};
-//
-//        temperatureFuelMapping = new HashMap<Integer, Image>(2) {{
-//            put(1, new Image(getClass().getResourceAsStream("/temperatureWarning.jpg")));
-//            put(2, new Image(getClass().getResourceAsStream("/temperature.jpg")));
-//            put(3, new Image(getClass().getResourceAsStream("/fuelWarning.jpg")));
-//            put(4, new Image(getClass().getResourceAsStream("/fuel.jpg")));
-//        }};
+        initCamera();
+        initSubscene();
+
+        gearMapping = new HashMap<Double, Image>(7) {{
+            put(0d, new Image(getClass().getResourceAsStream(Gear.Neutral.getFieldValue())));
+            put(1d, new Image(getClass().getResourceAsStream(Gear.First.getFieldValue())));
+            put(2d, new Image(getClass().getResourceAsStream(Gear.Second.getFieldValue())));
+            put(3d, new Image(getClass().getResourceAsStream(Gear.Third.getFieldValue())));
+            put(4d, new Image(getClass().getResourceAsStream(Gear.Forth.getFieldValue())));
+            put(5d, new Image(getClass().getResourceAsStream(Gear.Fifth.getFieldValue())));
+            put(6d, new Image(getClass().getResourceAsStream(Gear.Reverse.getFieldValue())));
+        }};
+
+        temperatureFuelMapping = new HashMap<Integer, Image>(2) {{
+            put(1, new Image(getClass().getResourceAsStream("/temperatureWarning.jpg")));
+            put(2, new Image(getClass().getResourceAsStream("/temperature.jpg")));
+            put(3, new Image(getClass().getResourceAsStream("/fuelWarning.jpg")));
+            put(4, new Image(getClass().getResourceAsStream("/fuel.jpg")));
+        }};
 
         this.speedGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.DIGITAL)
@@ -135,20 +165,61 @@ public class KadettDashboard extends Dashboard {
         animationAbsPos.setWidth(500);
         animationAbsPos.setHeight(500);
         animationAbsPos.setOrder(2);
-        //animationAbsPos.setAnimation(speedTransition);
-//
+//        animationAbsPos.setAnimation(speedTransition);
+
 //        gearShift = new Image(getClass().getResourceAsStream(Gear.Neutral.getFieldValue()));
 //        gearShiftView = new ImageView(gearShift);
 //        gearShiftView.toFront();
-//
-//        gearShiftAbsPos = new AbsolutePositioning();
-//        gearShiftAbsPos.setPosX(355);
-//        gearShiftAbsPos.setPosY(5);
-//        gearShiftAbsPos.setWidth(100);
-//        gearShiftAbsPos.setHeight(78);
-//        gearShiftAbsPos.setOrder(1);
-//
 
+        Gauge gearShift = GaugeBuilder.create()
+                .skinType(Gauge.SkinType.BULLET_CHART)
+                .autoScale(false)
+                .barColor(Color.CORNFLOWERBLUE)
+                .barBackgroundColor(Color.CORNFLOWERBLUE)
+                .foregroundBaseColor(Color.CORNFLOWERBLUE)
+                .titleColor(Color.CORNFLOWERBLUE)
+                .valueColor(Color.CORNFLOWERBLUE)
+                .title("RPM")
+                .decimals(0)
+                .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
+                .minValue(0.0D)
+                .maxValue(4500.0D)
+                .majorTickSpace(1000D)
+                .minorTickSpace(500D)
+                .majorTickMarksVisible(false)
+                .mediumTickMarksVisible(false)
+                .minorTickMarksVisible(false)
+                .startFromZero(false)
+                .returnToZero(false)
+                .build();
+
+        gearShiftAbsPos = new AbsolutePositioning();
+        gearShiftAbsPos.setPosX(355);
+        gearShiftAbsPos.setPosY(5);
+        gearShiftAbsPos.setWidth(100);
+        gearShiftAbsPos.setHeight(78);
+        gearShiftAbsPos.setOrder(1);
+
+
+        Button button = new Button("Start");
+        button.setOnMouseClicked(e -> animateStart(camera));
+
+        Button button2 = new Button("Stop");
+        button2.setOnMouseClicked(e -> animateStop(camera));
+
+        AbsolutePositioning buttonAbsolutePos = new AbsolutePositioning();
+        buttonAbsolutePos.setPosX(0);
+        buttonAbsolutePos.setPosY(0);
+        buttonAbsolutePos.setWidth(30);
+        buttonAbsolutePos.setHeight(20);
+        buttonAbsolutePos.setOrder(3);
+
+        AbsolutePositioning buttonAbsolutePos2 = new AbsolutePositioning();
+        buttonAbsolutePos2.setPosX(30);
+        buttonAbsolutePos2.setPosY(0);
+        buttonAbsolutePos2.setWidth(30);
+        buttonAbsolutePos2.setHeight(20);
+        buttonAbsolutePos2.setOrder(4);
 //
 //        tempGauge = GaugeBuilder.create()
 //                .sections(new Section(50, 65), new Section(120, 130))
@@ -399,12 +470,14 @@ public class KadettDashboard extends Dashboard {
         getNodes().add(new CustomEntry<>(rpmGauge, rpmGaugeAbsPos));
 //        getNodes().add(new CustomEntry<>(dieselGauge, dieselGaugeAbsPos));
         getNodes().add(new CustomEntry<>(speedGauge, speedGaugeAbsPos));
-        getNodes().add(new CustomEntry<>(createSubScene(), animationAbsPos));
+        getNodes().add(new CustomEntry<>(subscene, animationAbsPos));
 //        getNodes().add(new CustomEntry<>(tempGauge, tempGaugeAbsPos));
 //        getNodes().add(new CustomEntry<>(tempImageView, tempImageAbsPos));
 //        getNodes().add(new CustomEntry<>(dieselImageView, dieselImageAbsPos));
 //        getNodes().add(new CustomEntry<>(distanceLcd, distanceLcdAbsPos));
-//        getNodes().add(new CustomEntry<>(gearShiftView, gearShiftAbsPos));
+        getNodes().add(new CustomEntry<>(gearShift, gearShiftAbsPos));
+        getNodes().add(new CustomEntry<>(button, buttonAbsolutePos));
+        getNodes().add(new CustomEntry<>(button2, buttonAbsolutePos2));
 //        getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
 //        getNodes().add(new CustomEntry<>(oilPressureImageView, oilPressureImageAbsPos));
 //        getNodes().add(new CustomEntry<>(brakesOilImageView, brakesOilImageAbsPos));
@@ -439,54 +512,50 @@ public class KadettDashboard extends Dashboard {
 //        animationTimer.start();
     }
 
-    private void animate(Camera camera) {
+    private void animateStart(Camera camera) {
         try {
-            RotateTransition rt = new RotateTransition(Duration.seconds(3), camera);
-            rt.setCycleCount(Integer.MAX_VALUE);
+            RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
+            rt.setCycleCount(1);
             rt.setAxis(Rotate.Y_AXIS);
-//            rt.setByAngle(-120);
-            rt.setByAngle(360);
+            rt.setByAngle(-138);
             rt.setInterpolator(Interpolator.LINEAR);
-            rt.play();
 
-//            RotateTransition rt2 = new RotateTransition(Duration.seconds(3));
-//            rt2.setAxis(Rotate.Z_AXIS);
-//            rt2.setByAngle(-120);
-//            rt2.setInterpolator(Interpolator.LINEAR);
-//
-//            TranslateTransition tt = new TranslateTransition(Duration.seconds(3));
-//            tt.setByX(50);
-//
-//            SequentialTransition sequentialTransition = new SequentialTransition(camera, rt, rt2, tt);
-////        sequentialTransition.setAutoReverse(true);
-//
-//            sequentialTransition.play();
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
+            tt.setByZ(20);
+
+            rt.setOnFinished(e -> tt.play());
+
+            rt.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void animateStop(Camera camera) {
+        try {
+            RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
+            rt.setCycleCount(1);
+            rt.setAxis(Rotate.Y_AXIS);
+            rt.setByAngle(138);
+            rt.setInterpolator(Interpolator.LINEAR);
+
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
+            tt.setByZ(-20);
+
+            tt.setOnFinished(e -> rt.play());
+
+            tt.play();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private SubScene createSubScene() {
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        camera.setFieldOfView(45);
-
-        camera.getTransforms().addAll(
-                new Rotate(-60, Rotate.Y_AXIS),
-                new Rotate(0, Rotate.X_AXIS),
-                new Rotate(0, Rotate.Z_AXIS),
-                new Translate(0, -10, 0),
-                new Translate(0, 0, -80) //-80
-        );
-
-        camera.setNearClip(0.1);
-        camera.setFarClip(200);
-
         Group model = loadModel();
         model.getTransforms().add(new Scale(0.1, 0.1, 0.1));
 
         SubScene subScene = new SubScene(model, 1920, 720, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
-        animate(camera);
 
         return subScene;
     }
@@ -500,7 +569,9 @@ public class KadettDashboard extends Dashboard {
         Node[] meshes = importer.getImport();
 
         for (Node view : meshes) {
-            modelRoot.getChildren().add(view);
+            if (!view.getId().equals("LicPlate01_Root") && !view.getId().equals("LicPlate02_Root")) {
+                modelRoot.getChildren().add(view);
+            }
         }
 
         return modelRoot;
