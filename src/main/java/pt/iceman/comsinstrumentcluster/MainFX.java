@@ -1,10 +1,14 @@
 package pt.iceman.comsinstrumentcluster;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import pt.iceman.comsinstrumentcluster.dashboard.KadettDashboard;
 import pt.iceman.comsinstrumentcluster.screen.ScreenLoader;
 
@@ -25,6 +29,17 @@ public class MainFX extends Application {
 
         stage.setScene(scene);
         stage.show();
+
+        Notifications notificationBuilder = Notifications.create()
+                .title("Fuel Warning")
+                .text("Fuel low level detected!")
+                .hideAfter(Duration.seconds(20))
+                .position(Pos.BOTTOM_CENTER)
+                .darkStyle()
+                .graphic(root);
+
+        notificationBuilder.showWarning();
+
     }
 
     public void stop() {

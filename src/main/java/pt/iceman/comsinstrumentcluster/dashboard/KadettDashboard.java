@@ -1,21 +1,16 @@
 package pt.iceman.comsinstrumentcluster.dashboard;
 
 import eu.hansolo.medusa.*;
-import javafx.animation.*;
-import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
-import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Stop;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -41,7 +36,7 @@ public class KadettDashboard extends Dashboard {
         this.camera = new PerspectiveCamera(true);
         this.camera.setFieldOfView(45);
         this.camera.getTransforms().addAll(
-                new Rotate(45, new Point3D(-0.2505628070857316, -0.9351131265310294, -0.25056280708573153)),
+                new Rotate(90, new Point3D(-0.2505628070857316, -0.9351131265310294, -0.25056280708573153)),
                 new Rotate(0, Rotate.Y_AXIS),
                 new Rotate(0, Rotate.Z_AXIS),
                 new Translate(0, -10, 0),
@@ -86,11 +81,11 @@ public class KadettDashboard extends Dashboard {
         this.speedGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.DIGITAL)
                 .autoScale(false)
-                .barColor(Color.CORNFLOWERBLUE)
-                .barBackgroundColor(Color.CORNFLOWERBLUE)
-                .foregroundBaseColor(Color.CORNFLOWERBLUE)
-                .titleColor(Color.CORNFLOWERBLUE)
-                .valueColor(Color.CORNFLOWERBLUE)
+                .barColor(Color.BLANCHEDALMOND)
+                .barBackgroundColor(Color.BLANCHEDALMOND)
+                .foregroundBaseColor(Color.BLANCHEDALMOND)
+                .titleColor(Color.BLANCHEDALMOND)
+                .valueColor(Color.BLANCHEDALMOND)
                 .title("Km/h")
                 .decimals(0)
                 .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
@@ -104,6 +99,8 @@ public class KadettDashboard extends Dashboard {
                 .startFromZero(false)
                 .returnToZero(false)
                 .build();
+
+        this.speedGauge.setValue(172);
 
         speedGauge.setAnimationDuration(800);
         speedGauge.toBack();
@@ -121,14 +118,17 @@ public class KadettDashboard extends Dashboard {
         speedGaugeAbsPos.setOrder(0);
         speedGaugeAbsPos.setAnimation(speedTransition);
 
+        Section orange = SectionBuilder.create().start(3500.0D).stop(4000.0D).color(Color.ORANGE).build();
+        Section red = SectionBuilder.create().start(4001.0D).stop(4500.0D).color(Color.RED).build();
+
         this.rpmGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.DIGITAL)
                 .autoScale(false)
-                .barColor(Color.CORNFLOWERBLUE)
-                .barBackgroundColor(Color.CORNFLOWERBLUE)
-                .foregroundBaseColor(Color.CORNFLOWERBLUE)
-                .titleColor(Color.CORNFLOWERBLUE)
-                .valueColor(Color.CORNFLOWERBLUE)
+                .barColor(Color.BLANCHEDALMOND)
+                .barBackgroundColor(Color.BLANCHEDALMOND)
+                .foregroundBaseColor(Color.BLANCHEDALMOND)
+                .titleColor(Color.BLANCHEDALMOND)
+                .valueColor(Color.BLANCHEDALMOND)
                 .title("RPM")
                 .decimals(0)
                 .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
@@ -141,20 +141,18 @@ public class KadettDashboard extends Dashboard {
                 .minorTickMarksVisible(false)
                 .startFromZero(false)
                 .returnToZero(false)
+                .sections(orange, red)
+                .sectionsVisible(true)
                 .build();
 
-        TranslateTransition rpmTransition = new TranslateTransition();
-        rpmTransition.setByX(-684);
-        rpmTransition.setDuration(Duration.millis(1000));
-        rpmTransition.setNode(rpmGauge);
+        this.rpmGauge.setValue(3478);
 
         rpmGaugeAbsPos = new AbsolutePositioning();
-        rpmGaugeAbsPos.setPosX(1920);
+        rpmGaugeAbsPos.setPosX(1236);
         rpmGaugeAbsPos.setPosY(65);
         rpmGaugeAbsPos.setWidth(550);
         rpmGaugeAbsPos.setHeight(550);
         rpmGaugeAbsPos.setOrder(1);
-        rpmGaugeAbsPos.setAnimation(rpmTransition);
 
         rpmGauge.setAnimationDuration(800);
         rpmGauge.toBack();
@@ -171,34 +169,12 @@ public class KadettDashboard extends Dashboard {
 //        gearShiftView = new ImageView(gearShift);
 //        gearShiftView.toFront();
 
-        Gauge gearShift = GaugeBuilder.create()
-                .skinType(Gauge.SkinType.BULLET_CHART)
-                .autoScale(false)
-                .barColor(Color.CORNFLOWERBLUE)
-                .barBackgroundColor(Color.CORNFLOWERBLUE)
-                .foregroundBaseColor(Color.CORNFLOWERBLUE)
-                .titleColor(Color.CORNFLOWERBLUE)
-                .valueColor(Color.CORNFLOWERBLUE)
-                .title("RPM")
-                .decimals(0)
-                .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
-                .minValue(0.0D)
-                .maxValue(4500.0D)
-                .majorTickSpace(1000D)
-                .minorTickSpace(500D)
-                .majorTickMarksVisible(false)
-                .mediumTickMarksVisible(false)
-                .minorTickMarksVisible(false)
-                .startFromZero(false)
-                .returnToZero(false)
-                .build();
-
-        gearShiftAbsPos = new AbsolutePositioning();
-        gearShiftAbsPos.setPosX(355);
-        gearShiftAbsPos.setPosY(5);
-        gearShiftAbsPos.setWidth(100);
-        gearShiftAbsPos.setHeight(78);
-        gearShiftAbsPos.setOrder(1);
+//        gearShiftAbsPos = new AbsolutePositioning();
+//        gearShiftAbsPos.setPosX(355);
+//        gearShiftAbsPos.setPosY(5);
+//        gearShiftAbsPos.setWidth(100);
+//        gearShiftAbsPos.setHeight(78);
+//        gearShiftAbsPos.setOrder(1);
 
 
         Button button = new Button("Start");
@@ -221,62 +197,83 @@ public class KadettDashboard extends Dashboard {
         buttonAbsolutePos2.setHeight(20);
         buttonAbsolutePos2.setOrder(4);
 //
-//        tempGauge = GaugeBuilder.create()
-//                .sections(new Section(50, 65), new Section(120, 130))
-//                .unit("ºC")
-//                .minValue(50)
-//                .maxValue(130)
-//                .majorTickSpace(20)
-//                .minorTickSpace(10)
-//                .build();
-//
-//        tempGauge.setStyle(" -section-fill-0: rgb(24.0, 113.0, 214.0);-section-fill-1: rgb(225.0, 0.0, 69.0);");
-//        tempGauge.setAnimationDuration(400);
-//        tempGauge.setStartAngle(270);
-//        tempGauge.setAngleRange(180);
-//        tempGauge.toFront();
-//
-//        TranslateTransition tempTransition = new TranslateTransition();
-//        tempTransition.setByX(800);
-//        tempTransition.setDuration(Duration.millis(1000));
-//        tempTransition.setNode(tempGauge);
-//
-//        tempGaugeAbsPos = new AbsolutePositioning();
-//        tempGaugeAbsPos.setPosX(-700);
-//        tempGaugeAbsPos.setPosY(330);
-//        tempGaugeAbsPos.setWidth(220);
-//        tempGaugeAbsPos.setHeight(220);
-//        tempGaugeAbsPos.setOrder(14);
-//        tempGaugeAbsPos.setAnimation(tempTransition);
-//
-//        dieselGauge = GaugeBuilder.create()
-//                .sections(new Section(0, 7))
-//                .unit("L")
-//                .minValue(0)
-//                .maxValue(52)
-//                .majorTickSpace(10)
-//                .minorTickSpace(5)
-//                .build();
-//
-//        dieselGauge.setAnimationDuration(1500);
-//        dieselGauge.setStyle("-section-fill-0: rgb(225.0, 0.0, 69.0);");
-//        dieselGauge.setStartAngle(270);
-//        dieselGauge.setAngleRange(180);
-//        dieselGauge.toFront();
-//
-//        TranslateTransition dieselTransition = new TranslateTransition();
-//        dieselTransition.setByX(-800);
-//        dieselTransition.setDuration(Duration.millis(1000));
-//        dieselTransition.setNode(dieselGauge);
-//
-//        dieselGaugeAbsPos = new AbsolutePositioning();
-//        dieselGaugeAbsPos.setPosX(1290);
-//        dieselGaugeAbsPos.setPosY(330);
-//        dieselGaugeAbsPos.setWidth(220);
-//        dieselGaugeAbsPos.setHeight(220);
-//        dieselGaugeAbsPos.setOrder(15);
-//        dieselGaugeAbsPos.setAnimation(dieselTransition);
-//
+        tempGauge = GaugeBuilder.create()
+                .sections(new Section(50, 65, Color.BLUE), new Section(100, 130, Color.RED))
+                .sectionsVisible(true)
+                .title("ºC")
+                .minValue(50)
+                .maxValue(120)
+                .majorTickSpace(20)
+                .minorTickSpace(10)
+                .startAngle(270)
+                .angleRange(180)
+                .animationDuration(400)
+                .barColor(Color.BLANCHEDALMOND)
+                .barBackgroundColor(Color.BLANCHEDALMOND)
+                .foregroundBaseColor(Color.BLANCHEDALMOND)
+                .titleColor(Color.BLANCHEDALMOND)
+                .valueColor(Color.BLANCHEDALMOND)
+                .skinType(Gauge.SkinType.DIGITAL)
+                .build();
+
+        tempGauge.setValue(60);
+
+        tempGaugeAbsPos = new AbsolutePositioning();
+        tempGaugeAbsPos.setPosX(263);
+        tempGaugeAbsPos.setPosY(480);
+        tempGaugeAbsPos.setWidth(255);
+        tempGaugeAbsPos.setHeight(255);
+        tempGaugeAbsPos.setOrder(5);
+
+        tempImage = new Image(getClass().getResourceAsStream("/temperature.jpg"));
+        tempImageView = new ImageView();
+        tempImageView.setImage(tempImage);
+        tempImageView.toFront();
+        tempImageAbsPos = new AbsolutePositioning();
+        tempImageAbsPos.setPosX(378);
+        tempImageAbsPos.setPosY(660);
+        tempImageAbsPos.setWidth(35);
+        tempImageAbsPos.setHeight(20);
+        tempImageAbsPos.setOrder(6);
+
+        dieselGauge = GaugeBuilder.create()
+                .sections(new Section(0, 7, Color.RED))
+                .sectionsVisible(true)
+                .title("L")
+                .minValue(0)
+                .maxValue(52)
+                .minorTickSpace(1)
+                .majorTickSpace(5)
+                .animationDuration(400)
+                .barColor(Color.BLANCHEDALMOND)
+                .barBackgroundColor(Color.BLANCHEDALMOND)
+                .foregroundBaseColor(Color.BLANCHEDALMOND)
+                .titleColor(Color.BLANCHEDALMOND)
+                .valueColor(Color.BLANCHEDALMOND)
+                .skinType(Gauge.SkinType.DIGITAL)
+                .build();
+
+        dieselGauge.setValue(5.4);
+
+        dieselGaugeAbsPos = new AbsolutePositioning();
+        dieselGaugeAbsPos.setPosX(1388);
+        dieselGaugeAbsPos.setPosY(480);
+        dieselGaugeAbsPos.setWidth(255);
+        dieselGaugeAbsPos.setHeight(255);
+        dieselGaugeAbsPos.setOrder(7);
+
+        dieselImage = new Image(getClass().getResourceAsStream("/fuel.jpg"));
+        dieselImageView = new ImageView();
+        dieselImageView.setImage(dieselImage);
+        dieselImageView.toFront();
+
+        dieselImageAbsPos = new AbsolutePositioning();
+        dieselImageAbsPos.setPosX(1508);
+        dieselImageAbsPos.setPosY(660);
+        dieselImageAbsPos.setWidth(35);
+        dieselImageAbsPos.setHeight(20);
+        dieselImageAbsPos.setOrder(8);
+
 //        distanceLcd = LcdBuilder
 //                .create()
 //                .lcdDesign(Lcd.LcdDesign.WHITE)
@@ -325,170 +322,138 @@ public class KadettDashboard extends Dashboard {
 //        totalDistanceLcdAbsPos.setWidth(150);
 //        totalDistanceLcdAbsPos.setHeight(40);
 //        totalDistanceLcdAbsPos.setOrder(1);
-//
-//        tempImage = new Image(getClass().getResourceAsStream("/temperature.jpg"));
-//        tempImageView = new ImageView();
-//        tempImageView.setImage(tempImage);
-//        tempImageView.toFront();
-//        tempImageAbsPos = new AbsolutePositioning();
-//        tempImageAbsPos.setPosX(195);
-//        tempImageAbsPos.setPosY(385);
-//        tempImageAbsPos.setWidth(35);
-//        tempImageAbsPos.setHeight(20);
-//        tempImageAbsPos.setOrder(13);
-//
-//        dieselImage = new Image(getClass().getResourceAsStream("/fuel.jpg"));
-//        dieselImageView = new ImageView();
-//        dieselImageView.setImage(dieselImage);
-//        dieselImageView.toFront();
-//        dieselImageAbsPos = new AbsolutePositioning();
-//        dieselImageAbsPos.setPosX(590);
-//        dieselImageAbsPos.setPosY(385);
-//        dieselImageAbsPos.setWidth(35);
-//        dieselImageAbsPos.setHeight(20);
-//        dieselImageAbsPos.setOrder(14);
-//
-//        oilPressureImage = new Image(getClass().getResourceAsStream("/oilPressure.jpg"));
-//        oilPressureImageView = new ImageView();
-//        oilPressureImageView.setVisible(false);
-//        oilPressureImageView.setImage(oilPressureImage);
-//        oilPressureImageView.toFront();
-//        oilPressureImageAbsPos = new AbsolutePositioning();
-//        oilPressureImageAbsPos.setPosX(516);
-//        oilPressureImageAbsPos.setPosY(238);
-//        oilPressureImageAbsPos.setWidth(26);
-//        oilPressureImageAbsPos.setHeight(25);
-//        oilPressureImageAbsPos.setOrder(2);
-//
-//        brakesOilImage = new Image(getClass().getResourceAsStream("/brakesWarning.jpg"));
-//        brakesOilImageView = new ImageView();
+
+
+
+        brakesOilImage = new Image(getClass().getResourceAsStream("/brakesWarning.jpg"));
+        brakesOilImageView = new ImageView();
 //        brakesOilImageView.setVisible(false);
-//        brakesOilImageView.setImage(brakesOilImage);
-//        brakesOilImageView.toFront();
-//        brakesOilImageAbsPos = new AbsolutePositioning();
-//        brakesOilImageAbsPos.setPosX(193);
-//        brakesOilImageAbsPos.setPosY(165);
-//        brakesOilImageAbsPos.setWidth(26);
-//        brakesOilImageAbsPos.setHeight(25);
-//        brakesOilImageAbsPos.setOrder(3);
-//
-//        batteryImage = new Image(getClass().getResourceAsStream("/battery.jpg"));
-//        batteryImageView = new ImageView();
+        brakesOilImageView.setImage(brakesOilImage);
+        brakesOilImageView.toFront();
+        brakesOilImageAbsPos = new AbsolutePositioning();
+        brakesOilImageAbsPos.setPosX(600);
+        brakesOilImageAbsPos.setPosY(0);
+        brakesOilImageAbsPos.setWidth(26);
+        brakesOilImageAbsPos.setHeight(25);
+        brakesOilImageAbsPos.setOrder(10);
+
+        oilPressureImage = new Image(getClass().getResourceAsStream("/oilPressure.jpg"));
+        oilPressureImageView = new ImageView();
+//        oilPressureImageView.setVisible(false);
+        oilPressureImageView.setImage(oilPressureImage);
+        oilPressureImageView.toFront();
+        oilPressureImageAbsPos = new AbsolutePositioning();
+        oilPressureImageAbsPos.setPosX(687);
+        oilPressureImageAbsPos.setPosY(0);
+        oilPressureImageAbsPos.setWidth(26);
+        oilPressureImageAbsPos.setHeight(25);
+        oilPressureImageAbsPos.setOrder(9);
+
+        batteryImage = new Image(getClass().getResourceAsStream("/battery.jpg"));
+        batteryImageView = new ImageView();
 //        batteryImageView.setVisible(false);
-//        batteryImageView.setImage(batteryImage);
-//        batteryImageView.toFront();
-//        batteryImageAbsPos = new AbsolutePositioning();
-//        batteryImageAbsPos.setPosX(138);
-//        batteryImageAbsPos.setPosY(205);
-//        batteryImageAbsPos.setWidth(26);
-//        batteryImageAbsPos.setHeight(25);
-//        batteryImageAbsPos.setOrder(4);
-//
-//        parkingImage = new Image(getClass().getResourceAsStream("/parking.jpg"));
-//        parkingImageView = new ImageView();
+        batteryImageView.setImage(batteryImage);
+        batteryImageView.toFront();
+        batteryImageAbsPos = new AbsolutePositioning();
+        batteryImageAbsPos.setPosX(774);
+        batteryImageAbsPos.setPosY(0);
+        batteryImageAbsPos.setWidth(26);
+        batteryImageAbsPos.setHeight(25);
+        batteryImageAbsPos.setOrder(11);
+
+        parkingImage = new Image(getClass().getResourceAsStream("/parking.jpg"));
+        parkingImageView = new ImageView();
 //        parkingImageView.setVisible(false);
-//        parkingImageView.setImage(parkingImage);
-//        parkingImageView.toFront();
-//        parkingImageAbsPos = new AbsolutePositioning();
-//        parkingImageAbsPos.setPosX(193);
-//        parkingImageAbsPos.setPosY(271);
-//        parkingImageAbsPos.setWidth(26);
-//        parkingImageAbsPos.setHeight(25);
-//        parkingImageAbsPos.setOrder(5);
-//
-//        highBeamsImage = new Image(getClass().getResourceAsStream("/highBeams.jpg"));
-//        highBeamsImageView = new ImageView();
+        parkingImageView.setImage(parkingImage);
+        parkingImageView.toFront();
+        parkingImageAbsPos = new AbsolutePositioning();
+        parkingImageAbsPos.setPosX(868);
+        parkingImageAbsPos.setPosY(0);
+        parkingImageAbsPos.setWidth(26);
+        parkingImageAbsPos.setHeight(25);
+        parkingImageAbsPos.setOrder(12);
+
+        highBeamsImage = new Image(getClass().getResourceAsStream("/highBeams.jpg"));
+        highBeamsImageView = new ImageView();
 //        highBeamsImageView.setVisible(false);
-//        highBeamsImageView.setImage(highBeamsImage);
-//        highBeamsImageView.toFront();
-//        highBeamsImageAbsPos = new AbsolutePositioning();
-//        highBeamsImageAbsPos.setPosX(623);
-//        highBeamsImageAbsPos.setPosY(180);
-//        highBeamsImageAbsPos.setWidth(26);
-//        highBeamsImageAbsPos.setHeight(25);
-//        highBeamsImageAbsPos.setOrder(6);
-//
-//        absImage = new Image(getClass().getResourceAsStream("/abs.jpg"));
-//        absImageView = new ImageView();
+        highBeamsImageView.setImage(highBeamsImage);
+        highBeamsImageView.toFront();
+        highBeamsImageAbsPos = new AbsolutePositioning();
+        highBeamsImageAbsPos.setPosX(955);
+        highBeamsImageAbsPos.setPosY(0);
+        highBeamsImageAbsPos.setWidth(26);
+        highBeamsImageAbsPos.setHeight(25);
+        highBeamsImageAbsPos.setOrder(13);
+
+        absImage = new Image(getClass().getResourceAsStream("/abs.jpg"));
+        absImageView = new ImageView();
 //        absImageView.setVisible(false);
-//        absImageView.setImage(absImage);
-//        absImageView.toFront();
-//        absImageAbsPos = new AbsolutePositioning();
-//        absImageAbsPos.setPosX(250);
-//        absImageAbsPos.setPosY(200);
-//        absImageAbsPos.setWidth(26);
-//        absImageAbsPos.setHeight(25);
-//        absImageAbsPos.setOrder(7);
-//
-//        sparkPlugImage = new Image(getClass().getResourceAsStream("/sparkPlug.jpg"));
-//        sparkPlugImageView = new ImageView();
+        absImageView.setImage(absImage);
+        absImageView.toFront();
+        absImageAbsPos = new AbsolutePositioning();
+        absImageAbsPos.setPosX(1042);
+        absImageAbsPos.setPosY(0);
+        absImageAbsPos.setWidth(26);
+        absImageAbsPos.setHeight(25);
+        absImageAbsPos.setOrder(14);
+
+        sparkPlugImage = new Image(getClass().getResourceAsStream("/sparkPlug.jpg"));
+        sparkPlugImageView = new ImageView();
 //        sparkPlugImageView.setVisible(false);
-//        sparkPlugImageView.setImage(sparkPlugImage);
-//        sparkPlugImageView.toFront();
-//        sparkPlugImageAbsPos = new AbsolutePositioning();
-//        sparkPlugImageAbsPos.setPosX(253);
-//        sparkPlugImageAbsPos.setPosY(252);
-//        sparkPlugImageAbsPos.setWidth(26);
-//        sparkPlugImageAbsPos.setHeight(25);
-//        sparkPlugImageAbsPos.setOrder(8);
-//
-//        turningSignsImage = new Image(getClass().getResourceAsStream("/turnSigns.jpg"));
-//        turningSignsImageView = new ImageView();
+        sparkPlugImageView.setImage(sparkPlugImage);
+        sparkPlugImageView.toFront();
+        sparkPlugImageAbsPos = new AbsolutePositioning();
+        sparkPlugImageAbsPos.setPosX(1129);
+        sparkPlugImageAbsPos.setPosY(0);
+        sparkPlugImageAbsPos.setWidth(26);
+        sparkPlugImageAbsPos.setHeight(25);
+        sparkPlugImageAbsPos.setOrder(15);
+
+        turningSignsImage = new Image(getClass().getResourceAsStream("/turnSigns.jpg"));
+        turningSignsImageView = new ImageView();
 //        turningSignsImageView.setVisible(false);
-//        turningSignsImageView.setImage(turningSignsImage);
-//        turningSignsImageView.toFront();
-//        turningSignsImageAbsPos = new AbsolutePositioning();
-//        turningSignsImageAbsPos.setPosX(638);
-//        turningSignsImageAbsPos.setPosY(241);
-//        turningSignsImageAbsPos.setWidth(26);
-//        turningSignsImageAbsPos.setHeight(25);
-//        turningSignsImageAbsPos.setOrder(9);
-//
-//        iceImage = new Image(getClass().getResourceAsStream("/ice formation.jpg"));
-//        iceImageView = new ImageView();
+        turningSignsImageView.setImage(turningSignsImage);
+        turningSignsImageView.toFront();
+        turningSignsImageAbsPos = new AbsolutePositioning();
+        turningSignsImageAbsPos.setPosX(1216);
+        turningSignsImageAbsPos.setPosY(0);
+        turningSignsImageAbsPos.setWidth(26);
+        turningSignsImageAbsPos.setHeight(25);
+        turningSignsImageAbsPos.setOrder(16);
+
+        iceImage = new Image(getClass().getResourceAsStream("/iceFormation.jpg"));
+        iceImageView = new ImageView();
 //        iceImageView.setVisible(false);
-//        iceImageView.setImage(iceImage);
-//        iceImageView.toFront();
-//        iceImageAbsPos = new AbsolutePositioning();
-//        iceImageAbsPos.setPosX(525);
-//        iceImageAbsPos.setPosY(190);
-//        iceImageAbsPos.setWidth(26);
-//        iceImageAbsPos.setHeight(25);
-//        iceImageAbsPos.setOrder(10);
-//
-//        backgroundImage = new Image(getClass().getResourceAsStream("/background.jpg"));
-//        backgroundImageView = new ImageView();
-//        backgroundImageView.setImage(backgroundImage);
-//        backgroundImageView.toFront();
-//        backgroundImageAbsPos = new AbsolutePositioning();
-//        backgroundImageAbsPos.setPosX(-1);
-//        backgroundImageAbsPos.setPosY(0);
-//        backgroundImageAbsPos.setWidth(800);
-//        backgroundImageAbsPos.setHeight(480);
-//        backgroundImageAbsPos.setOrder(0);
-//
+        iceImageView.setImage(iceImage);
+        iceImageView.toFront();
+        iceImageAbsPos = new AbsolutePositioning();
+        iceImageAbsPos.setPosX(1303);
+        iceImageAbsPos.setPosY(0);
+        iceImageAbsPos.setWidth(26);
+        iceImageAbsPos.setHeight(25);
+        iceImageAbsPos.setOrder(17);
+
         getNodes().add(new CustomEntry<>(rpmGauge, rpmGaugeAbsPos));
-//        getNodes().add(new CustomEntry<>(dieselGauge, dieselGaugeAbsPos));
+        getNodes().add(new CustomEntry<>(dieselGauge, dieselGaugeAbsPos));
         getNodes().add(new CustomEntry<>(speedGauge, speedGaugeAbsPos));
         getNodes().add(new CustomEntry<>(subscene, animationAbsPos));
-//        getNodes().add(new CustomEntry<>(tempGauge, tempGaugeAbsPos));
-//        getNodes().add(new CustomEntry<>(tempImageView, tempImageAbsPos));
-//        getNodes().add(new CustomEntry<>(dieselImageView, dieselImageAbsPos));
+        getNodes().add(new CustomEntry<>(tempGauge, tempGaugeAbsPos));
+        getNodes().add(new CustomEntry<>(tempImageView, tempImageAbsPos));
+        getNodes().add(new CustomEntry<>(dieselImageView, dieselImageAbsPos));
 //        getNodes().add(new CustomEntry<>(distanceLcd, distanceLcdAbsPos));
-        getNodes().add(new CustomEntry<>(gearShift, gearShiftAbsPos));
+//        getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
+//        getNodes().add(new CustomEntry<>(gearShift, gearShiftAbsPos));
         getNodes().add(new CustomEntry<>(button, buttonAbsolutePos));
         getNodes().add(new CustomEntry<>(button2, buttonAbsolutePos2));
-//        getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
-//        getNodes().add(new CustomEntry<>(oilPressureImageView, oilPressureImageAbsPos));
-//        getNodes().add(new CustomEntry<>(brakesOilImageView, brakesOilImageAbsPos));
-//        getNodes().add(new CustomEntry<>(batteryImageView, batteryImageAbsPos));
-//        getNodes().add(new CustomEntry<>(parkingImageView, parkingImageAbsPos));
-//        getNodes().add(new CustomEntry<>(highBeamsImageView, highBeamsImageAbsPos));
-//        getNodes().add(new CustomEntry<>(absImageView, absImageAbsPos));
-//        getNodes().add(new CustomEntry<>(sparkPlugImageView, sparkPlugImageAbsPos));
-//        getNodes().add(new CustomEntry<>(turningSignsImageView, turningSignsImageAbsPos));
-//        getNodes().add(new CustomEntry<>(backgroundImageView, backgroundImageAbsPos));
-//        getNodes().add(new CustomEntry<>(iceImageView, iceImageAbsPos));
+        getNodes().add(new CustomEntry<>(oilPressureImageView, oilPressureImageAbsPos));
+        getNodes().add(new CustomEntry<>(brakesOilImageView, brakesOilImageAbsPos));
+        getNodes().add(new CustomEntry<>(batteryImageView, batteryImageAbsPos));
+        getNodes().add(new CustomEntry<>(parkingImageView, parkingImageAbsPos));
+        getNodes().add(new CustomEntry<>(highBeamsImageView, highBeamsImageAbsPos));
+        getNodes().add(new CustomEntry<>(absImageView, absImageAbsPos));
+        getNodes().add(new CustomEntry<>(sparkPlugImageView, sparkPlugImageAbsPos));
+        getNodes().add(new CustomEntry<>(turningSignsImageView, turningSignsImageAbsPos));
+        getNodes().add(new CustomEntry<>(iceImageView, iceImageAbsPos));
 
 //        animationTimer = new AnimationTimer() {
 //            @Override
@@ -517,11 +482,11 @@ public class KadettDashboard extends Dashboard {
             RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
             rt.setCycleCount(1);
             rt.setAxis(Rotate.Y_AXIS);
-            rt.setByAngle(-138);
+            rt.setByAngle(-93);
             rt.setInterpolator(Interpolator.LINEAR);
 
             TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
-            tt.setByZ(20);
+            tt.setByZ(10);
 
             rt.setOnFinished(e -> tt.play());
 
@@ -536,11 +501,11 @@ public class KadettDashboard extends Dashboard {
             RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
             rt.setCycleCount(1);
             rt.setAxis(Rotate.Y_AXIS);
-            rt.setByAngle(138);
+            rt.setByAngle(93);
             rt.setInterpolator(Interpolator.LINEAR);
 
             TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
-            tt.setByZ(-20);
+            tt.setByZ(-10);
 
             tt.setOnFinished(e -> rt.play());
 
@@ -548,16 +513,6 @@ public class KadettDashboard extends Dashboard {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private SubScene createSubScene() {
-        Group model = loadModel();
-        model.getTransforms().add(new Scale(0.1, 0.1, 0.1));
-
-        SubScene subScene = new SubScene(model, 1920, 720, true, SceneAntialiasing.BALANCED);
-        subScene.setCamera(camera);
-
-        return subScene;
     }
 
     private Group loadModel() {
