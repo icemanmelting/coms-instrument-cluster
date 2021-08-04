@@ -6,6 +6,7 @@ import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.geometry.Point3D;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.CustomEntry;
 import com.interactivemesh.jfx.importer.tds.TdsModelImporter;
@@ -48,7 +50,6 @@ public class KadettDashboard extends Dashboard {
     }
 
     private void initSubscene() {
-        System.out.println("I was here");
         Group model = loadModel();
         model.getTransforms().add(new Scale(0.1, 0.1, 0.1));
 
@@ -81,6 +82,9 @@ public class KadettDashboard extends Dashboard {
         this.speedGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.DIGITAL)
                 .autoScale(false)
+                .lcdVisible(true)
+                .lcdCrystalEnabled(true)
+                .lcdDesign(LcdDesign.BLACK_RED)
                 .barColor(Color.BLANCHEDALMOND)
                 .barBackgroundColor(Color.BLANCHEDALMOND)
                 .foregroundBaseColor(Color.BLANCHEDALMOND)
@@ -178,7 +182,18 @@ public class KadettDashboard extends Dashboard {
 
 
         Button button = new Button("Start");
-        button.setOnMouseClicked(e -> animateStart(camera));
+        button.setOnMouseClicked(e -> {
+            animateStart(camera);
+            Notifications notificationBuilder = Notifications.create()
+                    .title("Fuel Warning")
+                    .text("Fuel low level detected!")
+                    .hideAfter(Duration.seconds(20))
+                    .position(Pos.BOTTOM_CENTER)
+                    .darkStyle()
+                    .graphic(subscene);
+
+            notificationBuilder.showWarning();
+        });
 
         Button button2 = new Button("Stop");
         button2.setOnMouseClicked(e -> animateStop(camera));
@@ -274,56 +289,28 @@ public class KadettDashboard extends Dashboard {
         dieselImageAbsPos.setHeight(20);
         dieselImageAbsPos.setOrder(8);
 
-//        distanceLcd = LcdBuilder
-//                .create()
-//                .lcdDesign(Lcd.LcdDesign.WHITE)
-//                .foregroundShadowVisible(false)
-//                .unit("Km")
-//                .unitVisible(true)
-//                .decimals(1)
-//                .animationDurationInMs(400)
-//                .maxMeasuredValueVisible(false)
-//                .threshold(26)
-//                .minValue(0)
-//                .maxValue(99999)
-//                .valueFont(Lcd.LcdFont.ELEKTRA)
-//                .animated(true)
-//                .build();
-//
-//
-//        distanceLcd.setOnMouseClicked(
-//                t -> CarCPU.resetDashTripKm()
-//        );
-//
-//        distanceLcdAbsPos = new AbsolutePositioning();
-//        distanceLcdAbsPos.setPosX(330);
-//        distanceLcdAbsPos.setPosY(380);
-//        distanceLcdAbsPos.setWidth(150);
-//        distanceLcdAbsPos.setHeight(40);
-//        distanceLcdAbsPos.setOrder(1);
-//
-//        totalDistanceLcd = LcdBuilder
-//                .create()
-//                .lcdDesign(Lcd.LcdDesign.WHITE)
-//                .foregroundShadowVisible(false)
-//                .unit("Km").unitVisible(true)
-//                .decimals(1)
-//                .animationDurationInMs(400).maxMeasuredValueVisible(false)
-//                .threshold(26)
-//                .minValue(0)
-//                .maxValue(99999)
-//                .valueFont(Lcd.LcdFont.ELEKTRA)
-//                .animated(true)
-//                .build();
-//
-//        totalDistanceLcdAbsPos = new AbsolutePositioning();
-//        totalDistanceLcdAbsPos.setPosX(330);
-//        totalDistanceLcdAbsPos.setPosY(420);
-//        totalDistanceLcdAbsPos.setWidth(150);
-//        totalDistanceLcdAbsPos.setHeight(40);
-//        totalDistanceLcdAbsPos.setOrder(1);
+        totalDistanceLcd = GaugeBuilder
+                .create()
+                .skinType(Gauge.SkinType.LCD)
+                .lcdDesign(LcdDesign.BLACK_RED)
+                .lcdCrystalEnabled(false)
+                .unit("Km")
+                .decimals(1)
+                .minValue(0)
+                .maxValue(99999)
+                .animated(true)
+                .areaIconsVisible(false)
+                .innerShadowEnabled(false)
+                .build();
 
+        totalDistanceLcd.setValue(23500);
 
+        totalDistanceLcdAbsPos = new AbsolutePositioning();
+        totalDistanceLcdAbsPos.setPosX(290);
+        totalDistanceLcdAbsPos.setPosY(380);
+        totalDistanceLcdAbsPos.setWidth(200);
+        totalDistanceLcdAbsPos.setHeight(100);
+        totalDistanceLcdAbsPos.setOrder(1);
 
         brakesOilImage = new Image(getClass().getResourceAsStream("/brakesWarning.jpg"));
         brakesOilImageView = new ImageView();
@@ -440,8 +427,7 @@ public class KadettDashboard extends Dashboard {
         getNodes().add(new CustomEntry<>(tempGauge, tempGaugeAbsPos));
         getNodes().add(new CustomEntry<>(tempImageView, tempImageAbsPos));
         getNodes().add(new CustomEntry<>(dieselImageView, dieselImageAbsPos));
-//        getNodes().add(new CustomEntry<>(distanceLcd, distanceLcdAbsPos));
-//        getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
+        getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
 //        getNodes().add(new CustomEntry<>(gearShift, gearShiftAbsPos));
         getNodes().add(new CustomEntry<>(button, buttonAbsolutePos));
         getNodes().add(new CustomEntry<>(button2, buttonAbsolutePos2));

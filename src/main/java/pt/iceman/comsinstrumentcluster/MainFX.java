@@ -17,7 +17,7 @@ public class MainFX extends Application {
     public MainFX() {
     }
 
-    public void start(Stage stage) {
+    public void start(Stage stage) throws InterruptedException {
         AnchorPane root = new AnchorPane();
         root.setStyle("-fx-background-color: #000000;");
 
@@ -28,18 +28,10 @@ public class MainFX extends Application {
         ScreenLoader.load(root, kadettDashboard);
 
         stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setFullScreen(true);
+        stage.requestFocus();
         stage.show();
-
-        Notifications notificationBuilder = Notifications.create()
-                .title("Fuel Warning")
-                .text("Fuel low level detected!")
-                .hideAfter(Duration.seconds(20))
-                .position(Pos.BOTTOM_CENTER)
-                .darkStyle()
-                .graphic(root);
-
-        notificationBuilder.showWarning();
-
     }
 
     public void stop() {
