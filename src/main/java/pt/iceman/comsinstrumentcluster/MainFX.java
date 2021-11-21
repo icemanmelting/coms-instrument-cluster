@@ -1,14 +1,10 @@
 package pt.iceman.comsinstrumentcluster;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import pt.iceman.comsinstrumentcluster.dashboard.KadettDashboard;
 import pt.iceman.comsinstrumentcluster.screen.ScreenLoader;
 
@@ -23,6 +19,7 @@ public class MainFX extends Application {
 
         Scene scene = new Scene(root, 1920, 720, true);
         scene.setFill(Color.BLACK);
+        scene.getStylesheets().add("/style.css");
 
         KadettDashboard kadettDashboard = new KadettDashboard();
         ScreenLoader.load(root, kadettDashboard);

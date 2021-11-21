@@ -301,6 +301,9 @@ public class KadettDashboard extends Dashboard {
                 .animated(true)
                 .areaIconsVisible(false)
                 .innerShadowEnabled(false)
+                .oldValueVisible(false)
+                .maxMeasuredValueVisible(false)
+                .minMeasuredValueVisible(false)
                 .build();
 
         totalDistanceLcd.setValue(23500);
