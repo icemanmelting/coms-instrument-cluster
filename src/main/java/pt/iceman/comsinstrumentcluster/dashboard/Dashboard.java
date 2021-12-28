@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.Screen;
+import pt.iceman.middleware.cars.BaseCommand;
 
 public abstract class Dashboard extends Screen {
     protected Gauge speedGauge;
@@ -89,6 +90,10 @@ public abstract class Dashboard extends Screen {
 
     public synchronized void setSpeed(double speed) {
         this.speed = speed;
+
+        Platform.runLater(() -> {
+            this.speedGauge.setValue(speed);
+        });
     }
 
     public Double getRpm() {
@@ -97,6 +102,10 @@ public abstract class Dashboard extends Screen {
 
     public void setRpm(double rpm) {
         this.rpm = rpm;
+
+        Platform.runLater(() -> {
+            this.rpmGauge.setValue(rpm);
+        });
     }
 
     public double getGear() {
@@ -133,6 +142,10 @@ public abstract class Dashboard extends Screen {
 
     public void setTemp(double temp) {
         this.temp = temp;
+
+        Platform.runLater(() -> {
+            this.tempGauge.setValue(temp);
+        });
     }
 
     public double getDiesel() {
@@ -141,6 +154,9 @@ public abstract class Dashboard extends Screen {
 
     public void setDiesel(double diesel) {
         this.diesel = diesel;
+        Platform.runLater(() -> {
+            this.dieselGauge.setValue(diesel);
+        });
     }
 
     public boolean isBrakesOil() {
@@ -238,6 +254,15 @@ public abstract class Dashboard extends Screen {
         });
     }
 
-    public void configureInstruments() {
+    public void configureInstruments() {}
+
+    public <T extends BaseCommand> void applyCommand(T baseCommand) {
+        setBattery(baseCommand.isBattery12vNotCharging());
+        setParking(baseCommand.isParkingBrakeOn());
+        setBrakesOil(baseCommand.isBrakesHydraulicFluidLevelLow());
+        setTurnSigns(baseCommand.isTurningSigns());
+        setAbs(baseCommand.isAbsAnomaly());
+        setHighBeams(baseCommand.isHighBeamOn());
+        setSpeed(baseCommand.getSpeed());
     }
 }

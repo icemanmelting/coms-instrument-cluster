@@ -20,9 +20,12 @@ import org.controlsfx.control.Notifications;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.CustomEntry;
 import com.interactivemesh.jfx.importer.tds.TdsModelImporter;
+import pt.iceman.middleware.cars.BaseCommand;
+import pt.iceman.middleware.cars.ice.ICEBased;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class KadettDashboard extends Dashboard {
     private Map<Double, Image> gearMapping;
@@ -63,20 +66,20 @@ public class KadettDashboard extends Dashboard {
         initSubscene();
 
         gearMapping = new HashMap<Double, Image>(7) {{
-            put(0d, new Image(getClass().getResourceAsStream(Gear.Neutral.getFieldValue())));
-            put(1d, new Image(getClass().getResourceAsStream(Gear.First.getFieldValue())));
-            put(2d, new Image(getClass().getResourceAsStream(Gear.Second.getFieldValue())));
-            put(3d, new Image(getClass().getResourceAsStream(Gear.Third.getFieldValue())));
-            put(4d, new Image(getClass().getResourceAsStream(Gear.Forth.getFieldValue())));
-            put(5d, new Image(getClass().getResourceAsStream(Gear.Fifth.getFieldValue())));
-            put(6d, new Image(getClass().getResourceAsStream(Gear.Reverse.getFieldValue())));
+            put(0d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Neutral.getFieldValue()))));
+            put(1d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.First.getFieldValue()))));
+            put(2d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Second.getFieldValue()))));
+            put(3d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Third.getFieldValue()))));
+            put(4d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Forth.getFieldValue()))));
+            put(5d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Fifth.getFieldValue()))));
+            put(6d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Reverse.getFieldValue()))));
         }};
 
         temperatureFuelMapping = new HashMap<Integer, Image>(2) {{
-            put(1, new Image(getClass().getResourceAsStream("/temperatureWarning.jpg")));
-            put(2, new Image(getClass().getResourceAsStream("/temperature.jpg")));
-            put(3, new Image(getClass().getResourceAsStream("/fuelWarning.jpg")));
-            put(4, new Image(getClass().getResourceAsStream("/fuel.jpg")));
+            put(1, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperatureWarning.jpg"))));
+            put(2, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperature.jpg"))));
+            put(3, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuelWarning.jpg"))));
+            put(4, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuel.jpg"))));
         }};
 
         this.speedGauge = GaugeBuilder.create()
@@ -240,7 +243,7 @@ public class KadettDashboard extends Dashboard {
         tempGaugeAbsPos.setHeight(255);
         tempGaugeAbsPos.setOrder(5);
 
-        tempImage = new Image(getClass().getResourceAsStream("/temperature.jpg"));
+        tempImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperature.jpg")));
         tempImageView = new ImageView();
         tempImageView.setImage(tempImage);
         tempImageView.toFront();
@@ -277,7 +280,7 @@ public class KadettDashboard extends Dashboard {
         dieselGaugeAbsPos.setHeight(255);
         dieselGaugeAbsPos.setOrder(7);
 
-        dieselImage = new Image(getClass().getResourceAsStream("/fuel.jpg"));
+        dieselImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuel.jpg")));
         dieselImageView = new ImageView();
         dieselImageView.setImage(dieselImage);
         dieselImageView.toFront();
@@ -315,7 +318,7 @@ public class KadettDashboard extends Dashboard {
         totalDistanceLcdAbsPos.setHeight(100);
         totalDistanceLcdAbsPos.setOrder(1);
 
-        brakesOilImage = new Image(getClass().getResourceAsStream("/brakesWarning.jpg"));
+        brakesOilImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/brakesWarning.jpg")));
         brakesOilImageView = new ImageView();
 //        brakesOilImageView.setVisible(false);
         brakesOilImageView.setImage(brakesOilImage);
@@ -327,7 +330,7 @@ public class KadettDashboard extends Dashboard {
         brakesOilImageAbsPos.setHeight(25);
         brakesOilImageAbsPos.setOrder(10);
 
-        oilPressureImage = new Image(getClass().getResourceAsStream("/oilPressure.jpg"));
+        oilPressureImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/oilPressure.jpg")));
         oilPressureImageView = new ImageView();
 //        oilPressureImageView.setVisible(false);
         oilPressureImageView.setImage(oilPressureImage);
@@ -339,7 +342,7 @@ public class KadettDashboard extends Dashboard {
         oilPressureImageAbsPos.setHeight(25);
         oilPressureImageAbsPos.setOrder(9);
 
-        batteryImage = new Image(getClass().getResourceAsStream("/battery.jpg"));
+        batteryImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/battery.jpg")));
         batteryImageView = new ImageView();
 //        batteryImageView.setVisible(false);
         batteryImageView.setImage(batteryImage);
@@ -351,7 +354,7 @@ public class KadettDashboard extends Dashboard {
         batteryImageAbsPos.setHeight(25);
         batteryImageAbsPos.setOrder(11);
 
-        parkingImage = new Image(getClass().getResourceAsStream("/parking.jpg"));
+        parkingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/parking.jpg")));
         parkingImageView = new ImageView();
 //        parkingImageView.setVisible(false);
         parkingImageView.setImage(parkingImage);
@@ -363,7 +366,7 @@ public class KadettDashboard extends Dashboard {
         parkingImageAbsPos.setHeight(25);
         parkingImageAbsPos.setOrder(12);
 
-        highBeamsImage = new Image(getClass().getResourceAsStream("/highBeams.jpg"));
+        highBeamsImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/highBeams.jpg")));
         highBeamsImageView = new ImageView();
 //        highBeamsImageView.setVisible(false);
         highBeamsImageView.setImage(highBeamsImage);
@@ -375,7 +378,7 @@ public class KadettDashboard extends Dashboard {
         highBeamsImageAbsPos.setHeight(25);
         highBeamsImageAbsPos.setOrder(13);
 
-        absImage = new Image(getClass().getResourceAsStream("/abs.jpg"));
+        absImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/abs.jpg")));
         absImageView = new ImageView();
 //        absImageView.setVisible(false);
         absImageView.setImage(absImage);
@@ -387,7 +390,7 @@ public class KadettDashboard extends Dashboard {
         absImageAbsPos.setHeight(25);
         absImageAbsPos.setOrder(14);
 
-        sparkPlugImage = new Image(getClass().getResourceAsStream("/sparkPlug.jpg"));
+        sparkPlugImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/sparkPlug.jpg")));
         sparkPlugImageView = new ImageView();
 //        sparkPlugImageView.setVisible(false);
         sparkPlugImageView.setImage(sparkPlugImage);
@@ -399,7 +402,7 @@ public class KadettDashboard extends Dashboard {
         sparkPlugImageAbsPos.setHeight(25);
         sparkPlugImageAbsPos.setOrder(15);
 
-        turningSignsImage = new Image(getClass().getResourceAsStream("/turnSigns.jpg"));
+        turningSignsImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/turnSigns.jpg")));
         turningSignsImageView = new ImageView();
 //        turningSignsImageView.setVisible(false);
         turningSignsImageView.setImage(turningSignsImage);
@@ -411,7 +414,7 @@ public class KadettDashboard extends Dashboard {
         turningSignsImageAbsPos.setHeight(25);
         turningSignsImageAbsPos.setOrder(16);
 
-        iceImage = new Image(getClass().getResourceAsStream("/iceFormation.jpg"));
+        iceImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iceFormation.jpg")));
         iceImageView = new ImageView();
 //        iceImageView.setVisible(false);
         iceImageView.setImage(iceImage);
@@ -549,5 +552,17 @@ public class KadettDashboard extends Dashboard {
                 dieselImageView.setImage(temperatureFuelMapping.get(4));
             });
         }
+    }
+
+    @Override
+    public <T extends BaseCommand> void applyCommand(T baseCommand) {
+        super.applyCommand(baseCommand);
+
+        ICEBased iceBased = (ICEBased) baseCommand;
+        setOilPressure(iceBased.isOilPressureLow());
+        setSparkPlug(iceBased.isSparkPlugOn());
+        setRpm(iceBased.getRpm());
+        setDiesel(iceBased.getFuelLevel());
+        setTemp(iceBased.getEngineTemperature());
     }
 }

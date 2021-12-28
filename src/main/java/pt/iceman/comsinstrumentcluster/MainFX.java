@@ -8,12 +8,14 @@ import javafx.stage.Stage;
 import pt.iceman.comsinstrumentcluster.dashboard.KadettDashboard;
 import pt.iceman.comsinstrumentcluster.screen.ScreenLoader;
 
+import java.net.SocketException;
+
 public class MainFX extends Application {
 
     public MainFX() {
     }
 
-    public void start(Stage stage) throws InterruptedException {
+    public void start(Stage stage) throws InterruptedException, SocketException {
         AnchorPane root = new AnchorPane();
         root.setStyle("-fx-background-color: #000000;");
 
@@ -24,9 +26,13 @@ public class MainFX extends Application {
         KadettDashboard kadettDashboard = new KadettDashboard();
         ScreenLoader.load(root, kadettDashboard);
 
+        Server server = new Server(kadettDashboard);
+        server.start();
+
+        stage.sizeToScene();
         stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setFullScreen(true);
+        stage.setMaximized(false);
+        stage.setFullScreen(false);
         stage.requestFocus();
         stage.show();
     }
