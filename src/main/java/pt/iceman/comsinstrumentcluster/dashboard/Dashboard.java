@@ -10,6 +10,7 @@ import pt.iceman.comsinstrumentcluster.screen.Screen;
 import pt.iceman.middleware.cars.BaseCommand;
 
 public abstract class Dashboard extends Screen {
+    protected State state;
     protected Gauge speedGauge;
     protected AbsolutePositioning speedGaugeAbsPos;
     protected double speed;
@@ -114,6 +115,7 @@ public abstract class Dashboard extends Screen {
 
     public void setGear(double gear) {
         this.gear = gear;
+        //todo add the gearshift image
     }
 
     public synchronized double getDistance() {

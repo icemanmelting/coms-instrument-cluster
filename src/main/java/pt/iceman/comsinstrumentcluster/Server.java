@@ -1,6 +1,7 @@
 package pt.iceman.comsinstrumentcluster;
 
-import pt.iceman.comsinstrumentcluster.dashboard.Dashboard;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import pt.iceman.middleware.cars.BaseCommand;
 
 import java.io.ByteArrayInputStream;
@@ -8,31 +9,31 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.BlockingQueue;
 
 public class Server extends Thread {
+    private static final Logger logger = LogManager.getLogger(CommandConsumer.class);
     private DatagramSocket socket;
-    private boolean running;
     private byte[] buf = new byte[65535];
-    private Dashboard dashboard;
+    private BlockingQueue<BaseCommand> commandQueue;
 
     private Server() throws SocketException {
         socket = new DatagramSocket(4446);
     }
 
-    public Server (Dashboard dashboard) throws SocketException {
+    public Server (BlockingQueue<BaseCommand> commandQueue) throws SocketException {
         this();
-        this.dashboard = dashboard;
+        this.commandQueue = commandQueue;
     }
 
     public void run() {
-        running = true;
         try {
             socket = new DatagramSocket(4444);
 
             DatagramPacket packet = null;
-            while (running)
+
+            while (true)
             {
                 packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
@@ -41,18 +42,18 @@ public class Server extends Thread {
                 ObjectInputStream ois = new ObjectInputStream(bais);
 
                 BaseCommand baseCommand = (BaseCommand) ois.readObject();
-                dashboard.applyCommand(baseCommand);
+
+                commandQueue.add(baseCommand);
 
                 buf = new byte[65535];
             }
         } catch (SocketException e) {
-            e.printStackTrace();
+           logger.error("Problem initializing socket on port 4444", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Problem receiving data on port 4444", e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Received object isn't BaseCommand", e);
         }
-
 
         socket.close();
     }

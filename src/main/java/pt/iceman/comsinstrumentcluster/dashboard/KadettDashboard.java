@@ -1,14 +1,14 @@
 package pt.iceman.comsinstrumentcluster.dashboard;
 
+import com.interactivemesh.jfx.importer.tds.TdsModelImporter;
 import eu.hansolo.medusa.*;
+import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.geometry.Point3D;
-import javafx.geometry.Pos;
 import javafx.scene.*;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -16,10 +16,8 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.CustomEntry;
-import com.interactivemesh.jfx.importer.tds.TdsModelImporter;
 import pt.iceman.middleware.cars.BaseCommand;
 import pt.iceman.middleware.cars.ice.ICEBased;
 
@@ -32,9 +30,11 @@ public class KadettDashboard extends Dashboard {
     private Map<Integer, Image> temperatureFuelMapping;
     private PerspectiveCamera camera;
     private SubScene subscene;
+    private boolean ignition;
 
     public KadettDashboard() {
         super();
+        this.ignition = false;
     }
 
     private void initCamera() {
@@ -183,38 +183,6 @@ public class KadettDashboard extends Dashboard {
 //        gearShiftAbsPos.setHeight(78);
 //        gearShiftAbsPos.setOrder(1);
 
-
-        Button button = new Button("Start");
-        button.setOnMouseClicked(e -> {
-            animateStart(camera);
-            Notifications notificationBuilder = Notifications.create()
-                    .title("Fuel Warning")
-                    .text("Fuel low level detected!")
-                    .hideAfter(Duration.seconds(20))
-                    .position(Pos.BOTTOM_CENTER)
-                    .darkStyle()
-                    .graphic(subscene);
-
-            notificationBuilder.showWarning();
-        });
-
-        Button button2 = new Button("Stop");
-        button2.setOnMouseClicked(e -> animateStop(camera));
-
-        AbsolutePositioning buttonAbsolutePos = new AbsolutePositioning();
-        buttonAbsolutePos.setPosX(0);
-        buttonAbsolutePos.setPosY(0);
-        buttonAbsolutePos.setWidth(30);
-        buttonAbsolutePos.setHeight(20);
-        buttonAbsolutePos.setOrder(3);
-
-        AbsolutePositioning buttonAbsolutePos2 = new AbsolutePositioning();
-        buttonAbsolutePos2.setPosX(30);
-        buttonAbsolutePos2.setPosY(0);
-        buttonAbsolutePos2.setWidth(30);
-        buttonAbsolutePos2.setHeight(20);
-        buttonAbsolutePos2.setOrder(4);
-//
         tempGauge = GaugeBuilder.create()
                 .sections(new Section(50, 65, Color.BLUE), new Section(100, 130, Color.RED))
                 .sectionsVisible(true)
@@ -320,7 +288,7 @@ public class KadettDashboard extends Dashboard {
 
         brakesOilImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/brakesWarning.jpg")));
         brakesOilImageView = new ImageView();
-//        brakesOilImageView.setVisible(false);
+        brakesOilImageView.setVisible(false);
         brakesOilImageView.setImage(brakesOilImage);
         brakesOilImageView.toFront();
         brakesOilImageAbsPos = new AbsolutePositioning();
@@ -332,7 +300,7 @@ public class KadettDashboard extends Dashboard {
 
         oilPressureImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/oilPressure.jpg")));
         oilPressureImageView = new ImageView();
-//        oilPressureImageView.setVisible(false);
+        oilPressureImageView.setVisible(false);
         oilPressureImageView.setImage(oilPressureImage);
         oilPressureImageView.toFront();
         oilPressureImageAbsPos = new AbsolutePositioning();
@@ -344,7 +312,7 @@ public class KadettDashboard extends Dashboard {
 
         batteryImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/battery.jpg")));
         batteryImageView = new ImageView();
-//        batteryImageView.setVisible(false);
+        batteryImageView.setVisible(false);
         batteryImageView.setImage(batteryImage);
         batteryImageView.toFront();
         batteryImageAbsPos = new AbsolutePositioning();
@@ -356,7 +324,7 @@ public class KadettDashboard extends Dashboard {
 
         parkingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/parking.jpg")));
         parkingImageView = new ImageView();
-//        parkingImageView.setVisible(false);
+        parkingImageView.setVisible(false);
         parkingImageView.setImage(parkingImage);
         parkingImageView.toFront();
         parkingImageAbsPos = new AbsolutePositioning();
@@ -368,7 +336,7 @@ public class KadettDashboard extends Dashboard {
 
         highBeamsImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/highBeams.jpg")));
         highBeamsImageView = new ImageView();
-//        highBeamsImageView.setVisible(false);
+        highBeamsImageView.setVisible(false);
         highBeamsImageView.setImage(highBeamsImage);
         highBeamsImageView.toFront();
         highBeamsImageAbsPos = new AbsolutePositioning();
@@ -380,7 +348,7 @@ public class KadettDashboard extends Dashboard {
 
         absImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/abs.jpg")));
         absImageView = new ImageView();
-//        absImageView.setVisible(false);
+        absImageView.setVisible(false);
         absImageView.setImage(absImage);
         absImageView.toFront();
         absImageAbsPos = new AbsolutePositioning();
@@ -392,7 +360,7 @@ public class KadettDashboard extends Dashboard {
 
         sparkPlugImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/sparkPlug.jpg")));
         sparkPlugImageView = new ImageView();
-//        sparkPlugImageView.setVisible(false);
+        sparkPlugImageView.setVisible(false);
         sparkPlugImageView.setImage(sparkPlugImage);
         sparkPlugImageView.toFront();
         sparkPlugImageAbsPos = new AbsolutePositioning();
@@ -404,7 +372,7 @@ public class KadettDashboard extends Dashboard {
 
         turningSignsImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/turnSigns.jpg")));
         turningSignsImageView = new ImageView();
-//        turningSignsImageView.setVisible(false);
+        turningSignsImageView.setVisible(false);
         turningSignsImageView.setImage(turningSignsImage);
         turningSignsImageView.toFront();
         turningSignsImageAbsPos = new AbsolutePositioning();
@@ -416,7 +384,7 @@ public class KadettDashboard extends Dashboard {
 
         iceImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iceFormation.jpg")));
         iceImageView = new ImageView();
-//        iceImageView.setVisible(false);
+        iceImageView.setVisible(false);
         iceImageView.setImage(iceImage);
         iceImageView.toFront();
         iceImageAbsPos = new AbsolutePositioning();
@@ -435,8 +403,7 @@ public class KadettDashboard extends Dashboard {
         getNodes().add(new CustomEntry<>(dieselImageView, dieselImageAbsPos));
         getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
 //        getNodes().add(new CustomEntry<>(gearShift, gearShiftAbsPos));
-        getNodes().add(new CustomEntry<>(button, buttonAbsolutePos));
-        getNodes().add(new CustomEntry<>(button2, buttonAbsolutePos2));
+
         getNodes().add(new CustomEntry<>(oilPressureImageView, oilPressureImageAbsPos));
         getNodes().add(new CustomEntry<>(brakesOilImageView, brakesOilImageAbsPos));
         getNodes().add(new CustomEntry<>(batteryImageView, batteryImageAbsPos));
@@ -447,64 +414,56 @@ public class KadettDashboard extends Dashboard {
         getNodes().add(new CustomEntry<>(turningSignsImageView, turningSignsImageAbsPos));
         getNodes().add(new CustomEntry<>(iceImageView, iceImageAbsPos));
 
-//        animationTimer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                speedGauge.setValue(getSpeed());
-//                rpmGauge.setValue(rpm);
-//                distanceLcd.setValue(distance);
-//                totalDistanceLcd.setValue(totalDistance);
-//                dieselGauge.setValue(diesel);
-//                tempGauge.setValue(temp);
-////                if ((rpm < 1000 && speed >= 0) || (rpm > 1000 && speed == 0)) {
-////                    gear = 0;
-////                }
-//                Platform.runLater(() -> {
-//                    gearShift = gearMapping.get(gear);
-//                    gearShiftView.setImage(gearShift);
-//                });
-//            }
-//        };
-//
-//        animationTimer.start();
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                speedGauge.setValue(getSpeed());
+                rpmGauge.setValue(rpm);
+                distanceLcd.setValue(distance);
+                totalDistanceLcd.setValue(totalDistance);
+                dieselGauge.setValue(diesel);
+                tempGauge.setValue(temp);
+//                if ((rpm < 1000 && speed >= 0) || (rpm > 1000 && speed == 0)) {
+//                    gear = 0;
+//                }
+                Platform.runLater(() -> {
+                    gearShift = gearMapping.get(gear);
+                    gearShiftView.setImage(gearShift);
+                });
+            }
+        };
+
+        animationTimer.start();
     }
 
     private void animateStart(Camera camera) {
-        try {
-            RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
-            rt.setCycleCount(1);
-            rt.setAxis(Rotate.Y_AXIS);
-            rt.setByAngle(-93);
-            rt.setInterpolator(Interpolator.LINEAR);
+        RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
+        rt.setCycleCount(1);
+        rt.setAxis(Rotate.Y_AXIS);
+        rt.setByAngle(-93);
+        rt.setInterpolator(Interpolator.LINEAR);
 
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
-            tt.setByZ(10);
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
+        tt.setByZ(10);
 
-            rt.setOnFinished(e -> tt.play());
+        rt.setOnFinished(e -> tt.play());
 
-            rt.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        rt.play();
     }
 
     private void animateStop(Camera camera) {
-        try {
-            RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
-            rt.setCycleCount(1);
-            rt.setAxis(Rotate.Y_AXIS);
-            rt.setByAngle(93);
-            rt.setInterpolator(Interpolator.LINEAR);
+        RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
+        rt.setCycleCount(1);
+        rt.setAxis(Rotate.Y_AXIS);
+        rt.setByAngle(93);
+        rt.setInterpolator(Interpolator.LINEAR);
 
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
-            tt.setByZ(-10);
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
+        tt.setByZ(-10);
 
-            tt.setOnFinished(e -> rt.play());
+        tt.setOnFinished(e -> rt.play());
 
-            tt.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        tt.play();
     }
 
     private Group loadModel() {
@@ -564,5 +523,37 @@ public class KadettDashboard extends Dashboard {
         setRpm(iceBased.getRpm());
         setDiesel(iceBased.getFuelLevel());
         setTemp(iceBased.getEngineTemperature());
+
+        if (state == null) {
+            if (ignition) {
+                state = new IgnitionOn();
+            } else {
+                state = new IgnitionOff();
+            }
+        }
+
+        if (iceBased.isIgnition() && !ignition) {
+            state.transitState();
+            state = new IgnitionOn();
+        } else if (!iceBased.isIgnition() && ignition) {
+            state.transitState();
+            state = new IgnitionOff();
+        }
+
+        ignition = iceBased.isIgnition();
+    }
+
+    private class IgnitionOn implements State {
+        @Override
+        public void transitState() {
+            animateStop(camera);
+        }
+    }
+
+    private class IgnitionOff implements State {
+        @Override
+        public void transitState() {
+            animateStart(camera);
+        }
     }
 }
