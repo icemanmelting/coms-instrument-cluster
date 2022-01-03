@@ -16,6 +16,8 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.CustomEntry;
 import pt.iceman.middleware.cars.BaseCommand;
@@ -26,8 +28,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class KadettDashboard extends Dashboard {
-    private Map<Double, Image> gearMapping;
-    private Map<Integer, Image> temperatureFuelMapping;
+    private static final Logger logger = LogManager.getLogger(KadettDashboard.class);
+
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final Map<Integer, Image> temperatureFuelMapping;
+
     private PerspectiveCamera camera;
     private SubScene subscene;
     private boolean ignition;
@@ -35,6 +40,12 @@ public class KadettDashboard extends Dashboard {
     public KadettDashboard() {
         super();
         this.ignition = false;
+        this.temperatureFuelMapping = new HashMap<>(2) {{
+            put(1, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperatureWarning.jpg"))));
+            put(2, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperature.jpg"))));
+            put(3, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuelWarning.jpg"))));
+            put(4, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuel.jpg"))));
+        }};
     }
 
     private void initCamera() {
@@ -50,6 +61,8 @@ public class KadettDashboard extends Dashboard {
 
         this.camera.setNearClip(0.1);
         this.camera.setFarClip(200);
+
+        logger.info("Camera initialized");
     }
 
     private void initSubscene() {
@@ -58,29 +71,14 @@ public class KadettDashboard extends Dashboard {
 
         this.subscene = new SubScene(model, 1920, 720, true, SceneAntialiasing.BALANCED);
         this.subscene.setCamera(this.camera);
+
+        logger.info("Subscene initialized");
     }
 
     @Override
     public void configureInstruments() {
         initCamera();
         initSubscene();
-
-        gearMapping = new HashMap<Double, Image>(7) {{
-            put(0d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Neutral.getFieldValue()))));
-            put(1d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.First.getFieldValue()))));
-            put(2d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Second.getFieldValue()))));
-            put(3d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Third.getFieldValue()))));
-            put(4d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Forth.getFieldValue()))));
-            put(5d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Fifth.getFieldValue()))));
-            put(6d, new Image(Objects.requireNonNull(getClass().getResourceAsStream(Gear.Reverse.getFieldValue()))));
-        }};
-
-        temperatureFuelMapping = new HashMap<Integer, Image>(2) {{
-            put(1, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperatureWarning.jpg"))));
-            put(2, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperature.jpg"))));
-            put(3, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuelWarning.jpg"))));
-            put(4, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuel.jpg"))));
-        }};
 
         this.speedGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.DIGITAL)
@@ -170,18 +168,6 @@ public class KadettDashboard extends Dashboard {
         animationAbsPos.setWidth(500);
         animationAbsPos.setHeight(500);
         animationAbsPos.setOrder(2);
-//        animationAbsPos.setAnimation(speedTransition);
-
-//        gearShift = new Image(getClass().getResourceAsStream(Gear.Neutral.getFieldValue()));
-//        gearShiftView = new ImageView(gearShift);
-//        gearShiftView.toFront();
-
-//        gearShiftAbsPos = new AbsolutePositioning();
-//        gearShiftAbsPos.setPosX(355);
-//        gearShiftAbsPos.setPosY(5);
-//        gearShiftAbsPos.setWidth(100);
-//        gearShiftAbsPos.setHeight(78);
-//        gearShiftAbsPos.setOrder(1);
 
         tempGauge = GaugeBuilder.create()
                 .sections(new Section(50, 65, Color.BLUE), new Section(100, 130, Color.RED))
@@ -222,7 +208,7 @@ public class KadettDashboard extends Dashboard {
         tempImageAbsPos.setHeight(20);
         tempImageAbsPos.setOrder(6);
 
-        dieselGauge = GaugeBuilder.create()
+        fuelGauge = GaugeBuilder.create()
                 .sections(new Section(0, 7, Color.RED))
                 .sectionsVisible(true)
                 .title("L")
@@ -239,7 +225,7 @@ public class KadettDashboard extends Dashboard {
                 .skinType(Gauge.SkinType.DIGITAL)
                 .build();
 
-        dieselGauge.setValue(5.4);
+        fuelGauge.setValue(5.4);
 
         dieselGaugeAbsPos = new AbsolutePositioning();
         dieselGaugeAbsPos.setPosX(1388);
@@ -248,17 +234,17 @@ public class KadettDashboard extends Dashboard {
         dieselGaugeAbsPos.setHeight(255);
         dieselGaugeAbsPos.setOrder(7);
 
-        dieselImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuel.jpg")));
-        dieselImageView = new ImageView();
-        dieselImageView.setImage(dieselImage);
-        dieselImageView.toFront();
+        fuelImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fuel.jpg")));
+        fuelImageViewer = new ImageView();
+        fuelImageViewer.setImage(fuelImage);
+        fuelImageViewer.toFront();
 
-        dieselImageAbsPos = new AbsolutePositioning();
-        dieselImageAbsPos.setPosX(1508);
-        dieselImageAbsPos.setPosY(660);
-        dieselImageAbsPos.setWidth(35);
-        dieselImageAbsPos.setHeight(20);
-        dieselImageAbsPos.setOrder(8);
+        fuelImageAbsPos = new AbsolutePositioning();
+        fuelImageAbsPos.setPosX(1508);
+        fuelImageAbsPos.setPosY(660);
+        fuelImageAbsPos.setWidth(35);
+        fuelImageAbsPos.setHeight(20);
+        fuelImageAbsPos.setOrder(8);
 
         totalDistanceLcd = GaugeBuilder
                 .create()
@@ -395,14 +381,13 @@ public class KadettDashboard extends Dashboard {
         iceImageAbsPos.setOrder(17);
 
         getNodes().add(new CustomEntry<>(rpmGauge, rpmGaugeAbsPos));
-        getNodes().add(new CustomEntry<>(dieselGauge, dieselGaugeAbsPos));
+        getNodes().add(new CustomEntry<>(fuelGauge, dieselGaugeAbsPos));
         getNodes().add(new CustomEntry<>(speedGauge, speedGaugeAbsPos));
         getNodes().add(new CustomEntry<>(subscene, animationAbsPos));
         getNodes().add(new CustomEntry<>(tempGauge, tempGaugeAbsPos));
         getNodes().add(new CustomEntry<>(tempImageView, tempImageAbsPos));
-        getNodes().add(new CustomEntry<>(dieselImageView, dieselImageAbsPos));
+        getNodes().add(new CustomEntry<>(fuelImageViewer, fuelImageAbsPos));
         getNodes().add(new CustomEntry<>(totalDistanceLcd, totalDistanceLcdAbsPos));
-//        getNodes().add(new CustomEntry<>(gearShift, gearShiftAbsPos));
 
         getNodes().add(new CustomEntry<>(oilPressureImageView, oilPressureImageAbsPos));
         getNodes().add(new CustomEntry<>(brakesOilImageView, brakesOilImageAbsPos));
@@ -417,23 +402,17 @@ public class KadettDashboard extends Dashboard {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                speedGauge.setValue(getSpeed());
+                speedGauge.setValue(speed);
                 rpmGauge.setValue(rpm);
-                distanceLcd.setValue(distance);
                 totalDistanceLcd.setValue(totalDistance);
-                dieselGauge.setValue(diesel);
+                fuelGauge.setValue(fuel);
                 tempGauge.setValue(temp);
-//                if ((rpm < 1000 && speed >= 0) || (rpm > 1000 && speed == 0)) {
-//                    gear = 0;
-//                }
-                Platform.runLater(() -> {
-                    gearShift = gearMapping.get(gear);
-                    gearShiftView.setImage(gearShift);
-                });
             }
         };
 
         animationTimer.start();
+
+        logger.info("Kadett Dashboard Instruments initialized");
     }
 
     private void animateStart(Camera camera) {
@@ -449,6 +428,8 @@ public class KadettDashboard extends Dashboard {
         rt.setOnFinished(e -> tt.play());
 
         rt.play();
+
+        logger.debug("Ignition started/camera rotated");
     }
 
     private void animateStop(Camera camera) {
@@ -464,6 +445,8 @@ public class KadettDashboard extends Dashboard {
         tt.setOnFinished(e -> rt.play());
 
         tt.play();
+
+        logger.debug("Ignition stopped/camera rotated");
     }
 
     private Group loadModel() {
@@ -480,6 +463,7 @@ public class KadettDashboard extends Dashboard {
             }
         }
 
+        logger.debug("Car model loaded");
         return modelRoot;
     }
 
@@ -488,29 +472,25 @@ public class KadettDashboard extends Dashboard {
         super.setTemp(temp);
 
         if (temp > 110) {
-            Platform.runLater(() -> {
-                tempImageView.setImage(temperatureFuelMapping.get(1));
-            });
+            Platform.runLater(() -> tempImageView.setImage(temperatureFuelMapping.get(1)));
         } else {
-            Platform.runLater(() -> {
-                tempImageView.setImage(temperatureFuelMapping.get(2));
-            });
+            Platform.runLater(() -> tempImageView.setImage(temperatureFuelMapping.get(2)));
         }
+
+        logger.debug("Temperature set {}", temp);
     }
 
     @Override
-    public void setDiesel(double diesel) {
-        super.setDiesel(diesel);
+    public void setFuel(double fuel) {
+        super.setFuel(fuel);
 
-        if (diesel <= 6) {
-            Platform.runLater(() -> {
-                dieselImageView.setImage(temperatureFuelMapping.get(3));
-            });
+        if (fuel <= 6) {
+            Platform.runLater(() -> fuelImageViewer.setImage(temperatureFuelMapping.get(3)));
         } else {
-            Platform.runLater(() -> {
-                dieselImageView.setImage(temperatureFuelMapping.get(4));
-            });
+            Platform.runLater(() -> fuelImageViewer.setImage(temperatureFuelMapping.get(4)));
         }
+
+        logger.debug("Fuel set {}", fuel);
     }
 
     @Override
@@ -521,7 +501,7 @@ public class KadettDashboard extends Dashboard {
         setOilPressure(iceBased.isOilPressureLow());
         setSparkPlug(iceBased.isSparkPlugOn());
         setRpm(iceBased.getRpm());
-        setDiesel(iceBased.getFuelLevel());
+        setFuel(iceBased.getFuelLevel());
         setTemp(iceBased.getEngineTemperature());
 
         if (state == null) {

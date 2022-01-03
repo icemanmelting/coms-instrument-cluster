@@ -5,19 +5,18 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.Screen;
 import pt.iceman.middleware.cars.BaseCommand;
 
 public abstract class Dashboard extends Screen {
+    private static final Logger logger = LogManager.getLogger(Dashboard.class);
     protected State state;
     protected Gauge speedGauge;
     protected AbsolutePositioning speedGaugeAbsPos;
     protected double speed;
-    protected Image gearShift;
-    protected ImageView gearShiftView;
-    protected AbsolutePositioning gearShiftAbsPos;
-    protected double gear;
     protected Gauge tempGauge;
     protected AbsolutePositioning tempGaugeAbsPos;
     protected double temp;
@@ -27,15 +26,12 @@ public abstract class Dashboard extends Screen {
     protected Gauge rpmGauge;
     protected AbsolutePositioning rpmGaugeAbsPos;
     protected double rpm;
-    protected Gauge dieselGauge;
+    protected Gauge fuelGauge;
     protected AbsolutePositioning dieselGaugeAbsPos;
-    protected double diesel;
-    protected Image dieselImage;
-    protected ImageView dieselImageView;
-    protected AbsolutePositioning dieselImageAbsPos;
-    protected Gauge distanceLcd;
-    protected AbsolutePositioning distanceLcdAbsPos;
-    protected double distance;
+    protected double fuel;
+    protected Image fuelImage;
+    protected ImageView fuelImageViewer;
+    protected AbsolutePositioning fuelImageAbsPos;
     protected Gauge totalDistanceLcd;
     protected AbsolutePositioning totalDistanceLcdAbsPos;
     protected double totalDistance;
@@ -72,9 +68,6 @@ public abstract class Dashboard extends Screen {
     protected Image turningSignsImage;
     protected ImageView turningSignsImageView;
     protected AbsolutePositioning turningSignsImageAbsPos;
-    protected Image backgroundImage;
-    protected ImageView backgroundImageView;
-    protected AbsolutePositioning backgroundImageAbsPos;
     protected boolean ice;
     protected Image iceImage;
     protected ImageView iceImageView;
@@ -94,6 +87,7 @@ public abstract class Dashboard extends Screen {
 
         Platform.runLater(() -> {
             this.speedGauge.setValue(speed);
+            logger.debug("Set speed value {}", speed);
         });
     }
 
@@ -106,36 +100,21 @@ public abstract class Dashboard extends Screen {
 
         Platform.runLater(() -> {
             this.rpmGauge.setValue(rpm);
+            logger.debug("Set rpm value {}", rpm);
         });
-    }
-
-    public double getGear() {
-        return this.gear;
-    }
-
-    public void setGear(double gear) {
-        this.gear = gear;
-        //todo add the gearshift image
-    }
-
-    public synchronized double getDistance() {
-        return this.distance;
     }
 
     public synchronized double getTotalDistance() {
         return this.totalDistance;
     }
 
-    public synchronized void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public synchronized void resetDistance() {
-        this.distance = 0.0D;
-    }
-
     public synchronized void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
+
+        Platform.runLater(() -> {
+            this.totalDistanceLcd.setValue(totalDistance);
+            logger.debug("Set total distance {}", totalDistance);
+        });
     }
 
     public double getTemp() {
@@ -147,17 +126,19 @@ public abstract class Dashboard extends Screen {
 
         Platform.runLater(() -> {
             this.tempGauge.setValue(temp);
+            logger.debug("Set temperature {}", temp);
         });
     }
 
-    public double getDiesel() {
-        return this.diesel;
+    public double getFuel() {
+        return this.fuel;
     }
 
-    public void setDiesel(double diesel) {
-        this.diesel = diesel;
+    public void setFuel(double fuel) {
+        this.fuel = fuel;
         Platform.runLater(() -> {
-            this.dieselGauge.setValue(diesel);
+            this.fuelGauge.setValue(fuel);
+            logger.debug("Set fuel {}", fuelGauge);
         });
     }
 
@@ -169,6 +150,7 @@ public abstract class Dashboard extends Screen {
         this.brakesOil = brakesOil;
         Platform.runLater(() -> {
             this.brakesOilImageView.setVisible(brakesOil);
+            logger.debug("Set brakes oil {}", brakesOil);
         });
     }
 
@@ -180,6 +162,7 @@ public abstract class Dashboard extends Screen {
         this.battery = battery;
         Platform.runLater(() -> {
             this.batteryImageView.setVisible(battery);
+            logger.debug("Set battery {}", battery);
         });
     }
 
@@ -191,6 +174,7 @@ public abstract class Dashboard extends Screen {
         this.abs = abs;
         Platform.runLater(() -> {
             this.absImageView.setVisible(abs);
+            logger.debug("Set ABS {}", abs);
         });
     }
 
@@ -202,6 +186,7 @@ public abstract class Dashboard extends Screen {
         this.parking = parking;
         Platform.runLater(() -> {
             this.parkingImageView.setVisible(parking);
+            logger.debug("Set parking {}", parking);
         });
     }
 
@@ -213,6 +198,7 @@ public abstract class Dashboard extends Screen {
         this.highBeams = highBeams;
         Platform.runLater(() -> {
             this.highBeamsImageView.setVisible(highBeams);
+            logger.debug("Set highbeams {}", highBeams);
         });
     }
 
@@ -224,6 +210,7 @@ public abstract class Dashboard extends Screen {
         this.oilPressure = oilPressure;
         Platform.runLater(() -> {
             this.oilPressureImageView.setVisible(oilPressure);
+            logger.debug("Set oil pressure {}", oilPressure);
         });
     }
 
@@ -235,6 +222,7 @@ public abstract class Dashboard extends Screen {
         this.sparkPlug = sparkPlug;
         Platform.runLater(() -> {
             this.sparkPlugImageView.setVisible(sparkPlug);
+            logger.debug("Set spark plug {}", sparkPlug);
         });
     }
 
@@ -246,6 +234,7 @@ public abstract class Dashboard extends Screen {
         this.turnSigns = turnSigns;
         Platform.runLater(() -> {
             this.turningSignsImageView.setVisible(turnSigns);
+            logger.debug("Set turn signs {}", turnSigns);
         });
     }
 
@@ -253,6 +242,7 @@ public abstract class Dashboard extends Screen {
         this.ice = ice;
         Platform.runLater(() -> {
             this.iceImageView.setVisible(ice);
+            logger.debug("Set ice {}", ice);
         });
     }
 
@@ -266,5 +256,6 @@ public abstract class Dashboard extends Screen {
         setAbs(baseCommand.isAbsAnomaly());
         setHighBeams(baseCommand.isHighBeamOn());
         setSpeed(baseCommand.getSpeed());
+        setTotalDistance(baseCommand.getTotalDistance());
     }
 }

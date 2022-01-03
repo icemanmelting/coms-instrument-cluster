@@ -52,7 +52,7 @@ public class Server extends Thread {
         } catch (IOException e) {
             logger.error("Problem receiving data on port 4444", e);
         } catch (ClassNotFoundException e) {
-            logger.error("Received object isn't BaseCommand", e);
+            logger.error("Received object does not extend BaseCommand.class", e);
         }
 
         socket.close();

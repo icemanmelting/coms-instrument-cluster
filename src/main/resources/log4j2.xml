@@ -4,7 +4,7 @@
         <Console name="main" target="SYSTEM_OUT">
             <PatternLayout pattern="[%d{YYYY-MM-dd HH:mm:ss.SSS}] [%t] %level{length=1} %logger{36} - %msg%n"/>
         </Console>
-        <File name="FileAppender" fileName="coms-instrument-cluster-${date:yyyyMMdd}.log" immediateFlush="false" append="true">
+        <File name="RollingFileAppender" fileName="coms-instrument-cluster-${date:yyyyMMdd}.log" immediateFlush="true" append="true">
             <PatternLayout pattern="[%d{YYYY-MM-dd HH:mm:ss.SSS}] [%t] %level{length=1} %logger{36} - %msg%n"/>
         </File>
     </Appenders>
