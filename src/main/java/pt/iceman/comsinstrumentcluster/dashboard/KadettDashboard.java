@@ -535,7 +535,6 @@ public class KadettDashboard extends Dashboard {
                 ProcessBuilder processBuilder = new ProcessBuilder();
                 processBuilder.command("bash", "-c", "vcgencmd display_power 1");
                 processBuilder.start();
-                Thread.sleep(5000);
 
                 return true;
             });
@@ -582,7 +581,7 @@ public class KadettDashboard extends Dashboard {
 
                 while (true) {
                     processBuilder.start();
-                    Thread.sleep(2000);
+                    Thread.sleep(500);
                 }
             });
         }

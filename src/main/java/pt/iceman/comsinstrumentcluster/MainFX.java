@@ -1,6 +1,7 @@
 package pt.iceman.comsinstrumentcluster;
 
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -47,6 +48,8 @@ public class MainFX extends Application {
         CommandConsumer commandConsumer = new CommandConsumer(kadettDashboard, commandQueue);
         commandConsumer.start();
         logger.info("Command consumer started");
+
+        scene.setCursor(Cursor.NONE);
 
         stage.sizeToScene();
         stage.setScene(scene);
