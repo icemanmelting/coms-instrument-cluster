@@ -546,7 +546,7 @@ public class KadettDashboard extends Dashboard {
         @Override
         public void transitState() throws ExecutionException, InterruptedException {
             animateStop(camera);
-            new ScreenOn().transitState().get();
+            new ScreenOff().transitState().get();
         }
     }
 
@@ -554,7 +554,7 @@ public class KadettDashboard extends Dashboard {
         @Override
         public void transitState() throws ExecutionException, InterruptedException {
             animateStart(camera);
-            new ScreenOff().transitState().get();
+            new ScreenOn().transitState().get();
         }
     }
 
