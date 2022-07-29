@@ -50,8 +50,8 @@ public class MainFX extends Application {
 
         stage.sizeToScene();
         stage.setScene(scene);
-        stage.setMaximized(false);
-        stage.setFullScreen(false);
+        stage.setMaximized(true);
+        stage.setFullScreen(true);
         stage.requestFocus();
         stage.show();
     }
