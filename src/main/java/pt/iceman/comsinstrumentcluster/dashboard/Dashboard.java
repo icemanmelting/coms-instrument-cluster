@@ -11,6 +11,8 @@ import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.Screen;
 import pt.iceman.middleware.cars.BaseCommand;
 
+import java.util.concurrent.ExecutionException;
+
 public abstract class Dashboard extends Screen {
     private static final Logger logger = LogManager.getLogger(Dashboard.class);
     protected State state;
@@ -248,7 +250,7 @@ public abstract class Dashboard extends Screen {
 
     public void configureInstruments() {}
 
-    public <T extends BaseCommand> void applyCommand(T baseCommand) {
+    public <T extends BaseCommand> void applyCommand(T baseCommand) throws ExecutionException, InterruptedException {
         setBattery(baseCommand.isBattery12vNotCharging());
         setParking(baseCommand.isParkingBrakeOn());
         setBrakesOil(baseCommand.isBrakesHydraulicFluidLevelLow());

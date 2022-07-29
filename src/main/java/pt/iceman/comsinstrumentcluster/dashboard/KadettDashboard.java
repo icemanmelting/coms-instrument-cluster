@@ -26,6 +26,10 @@ import pt.iceman.middleware.cars.ice.ICEBased;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class KadettDashboard extends Dashboard {
     private static final Logger logger = LogManager.getLogger(KadettDashboard.class);
@@ -81,29 +85,29 @@ public class KadettDashboard extends Dashboard {
         initSubscene();
 
         this.speedGauge = GaugeBuilder.create()
-                .skinType(Gauge.SkinType.DIGITAL)
-                .autoScale(false)
-                .lcdVisible(true)
-                .lcdCrystalEnabled(true)
-                .lcdDesign(LcdDesign.BLACK_RED)
-                .barColor(Color.BLANCHEDALMOND)
-                .barBackgroundColor(Color.BLANCHEDALMOND)
-                .foregroundBaseColor(Color.BLANCHEDALMOND)
-                .titleColor(Color.BLANCHEDALMOND)
-                .valueColor(Color.BLANCHEDALMOND)
-                .title("Km/h")
-                .decimals(0)
-                .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
-                .minValue(0.0D)
-                .maxValue(220.0D)
-                .majorTickSpace(50D)
-                .majorTickMarksVisible(false)
-                .mediumTickMarksVisible(false)
-                .minorTickMarksVisible(false)
-                .angleRange(120D)
-                .startFromZero(false)
-                .returnToZero(false)
-                .build();
+                                      .skinType(Gauge.SkinType.DIGITAL)
+                                      .autoScale(false)
+                                      .lcdVisible(true)
+                                      .lcdCrystalEnabled(true)
+                                      .lcdDesign(LcdDesign.BLACK_RED)
+                                      .barColor(Color.BLANCHEDALMOND)
+                                      .barBackgroundColor(Color.BLANCHEDALMOND)
+                                      .foregroundBaseColor(Color.BLANCHEDALMOND)
+                                      .titleColor(Color.BLANCHEDALMOND)
+                                      .valueColor(Color.BLANCHEDALMOND)
+                                      .title("Km/h")
+                                      .decimals(0)
+                                      .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
+                                      .minValue(0.0D)
+                                      .maxValue(220.0D)
+                                      .majorTickSpace(50D)
+                                      .majorTickMarksVisible(false)
+                                      .mediumTickMarksVisible(false)
+                                      .minorTickMarksVisible(false)
+                                      .angleRange(120D)
+                                      .startFromZero(false)
+                                      .returnToZero(false)
+                                      .build();
 
         this.speedGauge.setValue(172);
 
@@ -127,28 +131,28 @@ public class KadettDashboard extends Dashboard {
         Section red = SectionBuilder.create().start(4001.0D).stop(4500.0D).color(Color.RED).build();
 
         this.rpmGauge = GaugeBuilder.create()
-                .skinType(Gauge.SkinType.DIGITAL)
-                .autoScale(false)
-                .barColor(Color.BLANCHEDALMOND)
-                .barBackgroundColor(Color.BLANCHEDALMOND)
-                .foregroundBaseColor(Color.BLANCHEDALMOND)
-                .titleColor(Color.BLANCHEDALMOND)
-                .valueColor(Color.BLANCHEDALMOND)
-                .title("RPM")
-                .decimals(0)
-                .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
-                .minValue(0.0D)
-                .maxValue(4500.0D)
-                .majorTickSpace(1000D)
-                .minorTickSpace(500D)
-                .majorTickMarksVisible(false)
-                .mediumTickMarksVisible(false)
-                .minorTickMarksVisible(false)
-                .startFromZero(false)
-                .returnToZero(false)
-                .sections(orange, red)
-                .sectionsVisible(true)
-                .build();
+                                    .skinType(Gauge.SkinType.DIGITAL)
+                                    .autoScale(false)
+                                    .barColor(Color.BLANCHEDALMOND)
+                                    .barBackgroundColor(Color.BLANCHEDALMOND)
+                                    .foregroundBaseColor(Color.BLANCHEDALMOND)
+                                    .titleColor(Color.BLANCHEDALMOND)
+                                    .valueColor(Color.BLANCHEDALMOND)
+                                    .title("RPM")
+                                    .decimals(0)
+                                    .scaleDirection(Gauge.ScaleDirection.CLOCKWISE)
+                                    .minValue(0.0D)
+                                    .maxValue(4500.0D)
+                                    .majorTickSpace(1000D)
+                                    .minorTickSpace(500D)
+                                    .majorTickMarksVisible(false)
+                                    .mediumTickMarksVisible(false)
+                                    .minorTickMarksVisible(false)
+                                    .startFromZero(false)
+                                    .returnToZero(false)
+                                    .sections(orange, red)
+                                    .sectionsVisible(true)
+                                    .build();
 
         this.rpmGauge.setValue(3478);
 
@@ -170,23 +174,23 @@ public class KadettDashboard extends Dashboard {
         animationAbsPos.setOrder(2);
 
         tempGauge = GaugeBuilder.create()
-                .sections(new Section(50, 65, Color.BLUE), new Section(100, 130, Color.RED))
-                .sectionsVisible(true)
-                .title("ºC")
-                .minValue(50)
-                .maxValue(120)
-                .majorTickSpace(20)
-                .minorTickSpace(10)
-                .startAngle(270)
-                .angleRange(180)
-                .animationDuration(400)
-                .barColor(Color.BLANCHEDALMOND)
-                .barBackgroundColor(Color.BLANCHEDALMOND)
-                .foregroundBaseColor(Color.BLANCHEDALMOND)
-                .titleColor(Color.BLANCHEDALMOND)
-                .valueColor(Color.BLANCHEDALMOND)
-                .skinType(Gauge.SkinType.DIGITAL)
-                .build();
+                                .sections(new Section(50, 65, Color.BLUE), new Section(100, 130, Color.RED))
+                                .sectionsVisible(true)
+                                .title("ºC")
+                                .minValue(50)
+                                .maxValue(120)
+                                .majorTickSpace(20)
+                                .minorTickSpace(10)
+                                .startAngle(270)
+                                .angleRange(180)
+                                .animationDuration(400)
+                                .barColor(Color.BLANCHEDALMOND)
+                                .barBackgroundColor(Color.BLANCHEDALMOND)
+                                .foregroundBaseColor(Color.BLANCHEDALMOND)
+                                .titleColor(Color.BLANCHEDALMOND)
+                                .valueColor(Color.BLANCHEDALMOND)
+                                .skinType(Gauge.SkinType.DIGITAL)
+                                .build();
 
         tempGauge.setValue(60);
 
@@ -209,21 +213,21 @@ public class KadettDashboard extends Dashboard {
         tempImageAbsPos.setOrder(6);
 
         fuelGauge = GaugeBuilder.create()
-                .sections(new Section(0, 7, Color.RED))
-                .sectionsVisible(true)
-                .title("L")
-                .minValue(0)
-                .maxValue(52)
-                .minorTickSpace(1)
-                .majorTickSpace(5)
-                .animationDuration(400)
-                .barColor(Color.BLANCHEDALMOND)
-                .barBackgroundColor(Color.BLANCHEDALMOND)
-                .foregroundBaseColor(Color.BLANCHEDALMOND)
-                .titleColor(Color.BLANCHEDALMOND)
-                .valueColor(Color.BLANCHEDALMOND)
-                .skinType(Gauge.SkinType.DIGITAL)
-                .build();
+                                .sections(new Section(0, 7, Color.RED))
+                                .sectionsVisible(true)
+                                .title("L")
+                                .minValue(0)
+                                .maxValue(52)
+                                .minorTickSpace(1)
+                                .majorTickSpace(5)
+                                .animationDuration(400)
+                                .barColor(Color.BLANCHEDALMOND)
+                                .barBackgroundColor(Color.BLANCHEDALMOND)
+                                .foregroundBaseColor(Color.BLANCHEDALMOND)
+                                .titleColor(Color.BLANCHEDALMOND)
+                                .valueColor(Color.BLANCHEDALMOND)
+                                .skinType(Gauge.SkinType.DIGITAL)
+                                .build();
 
         fuelGauge.setValue(5.4);
 
@@ -494,7 +498,7 @@ public class KadettDashboard extends Dashboard {
     }
 
     @Override
-    public <T extends BaseCommand> void applyCommand(T baseCommand) {
+    public <T extends BaseCommand> void applyCommand(T baseCommand) throws ExecutionException, InterruptedException {
         super.applyCommand(baseCommand);
 
         ICEBased iceBased = (ICEBased) baseCommand;
@@ -523,17 +527,48 @@ public class KadettDashboard extends Dashboard {
         ignition = iceBased.isIgnition();
     }
 
+    private static class ScreenOn implements ScreenState {
+        private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        public Future<Boolean> transitState() {
+            return executor.submit(() -> {
+                ProcessBuilder processBuilder = new ProcessBuilder();
+                processBuilder.command("bash", "-c", "vcgencmd display_power 1");
+                processBuilder.start();
+                Thread.sleep(5000);
+
+                return true;
+            });
+        }
+    }
+
     private class IgnitionOn implements State {
         @Override
-        public void transitState() {
+        public void transitState() throws ExecutionException, InterruptedException {
             animateStop(camera);
+            new ScreenOn().transitState().get();
         }
     }
 
     private class IgnitionOff implements State {
         @Override
-        public void transitState() {
+        public void transitState() throws ExecutionException, InterruptedException {
             animateStart(camera);
+            new ScreenOff().transitState().get();
+        }
+    }
+
+    private static class ScreenOff implements ScreenState {
+        private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        public Future<Boolean> transitState() {
+            return executor.submit(() -> {
+                Thread.sleep(5000);
+                ProcessBuilder processBuilder = new ProcessBuilder();
+                processBuilder.command("bash", "-c", "vcgencmd display_power 0");
+                processBuilder.start();
+                return true;
+            });
         }
     }
 }
