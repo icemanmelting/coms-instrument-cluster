@@ -6,6 +6,7 @@ import pt.iceman.comsinstrumentcluster.dashboard.Dashboard;
 import pt.iceman.middleware.cars.BaseCommand;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 
 public class CommandConsumer extends Thread{
     private static final Logger logger = LogManager.getLogger(CommandConsumer.class);
@@ -24,7 +25,7 @@ public class CommandConsumer extends Thread{
             try {
                 BaseCommand baseCommand = commandQueue.take();
                 dashboard.applyCommand(baseCommand);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 logger.error("Problem getting command from command queue", e);
             }
         }
