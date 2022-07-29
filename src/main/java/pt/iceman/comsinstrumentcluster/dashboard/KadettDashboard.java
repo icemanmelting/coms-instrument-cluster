@@ -567,7 +567,7 @@ public class KadettDashboard extends Dashboard {
             screenState = new ScreenOn().transitState();
             screenState.get();
 
-            Thread.sleep(2000);
+            Thread.sleep(6000);
 
             animateStart(camera);
         }
