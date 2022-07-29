@@ -551,7 +551,9 @@ public class KadettDashboard extends Dashboard {
         public void transitState() throws ExecutionException, InterruptedException {
             animateStop(camera);
 
-            screenState.stop();
+            if (screenState != null) {
+                screenState.stop();
+            }
             screenState = new ScreenOff();
             screenState.transitState();
         }
@@ -560,7 +562,9 @@ public class KadettDashboard extends Dashboard {
     private class IgnitionOff implements State {
         @Override
         public void transitState() throws ExecutionException, InterruptedException {
-            screenState.stop();
+            if (screenState != null) {
+                screenState.stop();
+            }
             screenState = new ScreenOn();
             screenState.transitState().get();
 
