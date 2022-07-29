@@ -33,7 +33,7 @@ import java.util.concurrent.Future;
 
 public class KadettDashboard extends Dashboard {
     private static final Logger logger = LogManager.getLogger(KadettDashboard.class);
-
+    private static ScreenState screenState = null;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Map<Integer, Image> temperatureFuelMapping;
 
@@ -540,21 +540,31 @@ public class KadettDashboard extends Dashboard {
                 return true;
             });
         }
+
+        public void stop() {
+            executor.shutdown();
+        }
     }
 
     private class IgnitionOn implements State {
         @Override
         public void transitState() throws ExecutionException, InterruptedException {
             animateStop(camera);
-            new ScreenOff().transitState().get();
+
+            screenState.stop();
+            screenState = new ScreenOff();
+            screenState.transitState();
         }
     }
 
     private class IgnitionOff implements State {
         @Override
         public void transitState() throws ExecutionException, InterruptedException {
+            screenState.stop();
+            screenState = new ScreenOn();
+            screenState.transitState().get();
+
             animateStart(camera);
-            new ScreenOn().transitState().get();
         }
     }
 
@@ -566,9 +576,16 @@ public class KadettDashboard extends Dashboard {
                 Thread.sleep(5000);
                 ProcessBuilder processBuilder = new ProcessBuilder();
                 processBuilder.command("bash", "-c", "vcgencmd display_power 0");
-                processBuilder.start();
-                return true;
+
+                while (true) {
+                    processBuilder.start();
+                }
             });
+        }
+
+        @Override
+        public void stop() {
+            executor.shutdown();
         }
     }
 }
