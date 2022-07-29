@@ -33,7 +33,7 @@ import java.util.concurrent.Future;
 
 public class KadettDashboard extends Dashboard {
     private static final Logger logger = LogManager.getLogger(KadettDashboard.class);
-    private static ScreenState screenState = null;
+    private static Future<Boolean> screenState = null;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Map<Integer, Image> temperatureFuelMapping;
 
@@ -552,10 +552,9 @@ public class KadettDashboard extends Dashboard {
             animateStop(camera);
 
             if (screenState != null) {
-                screenState.stop();
+                screenState.cancel(true);
             }
-            screenState = new ScreenOff();
-            screenState.transitState();
+            screenState = new ScreenOff().transitState();
         }
     }
 
@@ -563,10 +562,10 @@ public class KadettDashboard extends Dashboard {
         @Override
         public void transitState() throws ExecutionException, InterruptedException {
             if (screenState != null) {
-                screenState.stop();
+                screenState.cancel(true);
             }
-            screenState = new ScreenOn();
-            screenState.transitState().get();
+            screenState = new ScreenOn().transitState();
+            screenState.get();
 
             animateStart(camera);
         }
@@ -583,6 +582,7 @@ public class KadettDashboard extends Dashboard {
 
                 while (true) {
                     processBuilder.start();
+                    Thread.sleep(2000);
                 }
             });
         }
