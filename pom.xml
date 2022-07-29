@@ -27,42 +27,42 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -83,7 +83,7 @@
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
-            <version>11.0.2</version>
+            <version>18.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
