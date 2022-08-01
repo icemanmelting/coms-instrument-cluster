@@ -49,12 +49,12 @@ public class MainFX extends Application {
         commandConsumer.start();
         logger.info("Command consumer started");
 
-        //scene.setCursor(Cursor.NONE);
+        scene.setCursor(Cursor.NONE);
 
         stage.sizeToScene();
         stage.setScene(scene);
-        stage.setMaximized(false);
-        stage.setFullScreen(false);
+        stage.setMaximized(true);
+        stage.setFullScreen(true);
         stage.requestFocus();
         stage.show();
     }
