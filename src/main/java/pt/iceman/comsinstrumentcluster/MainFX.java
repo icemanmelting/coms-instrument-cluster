@@ -37,7 +37,7 @@ public class MainFX extends Application {
         ScreenLoader.load(root, kadettDashboard);
 
         logger.info("Initializing command queue");
-        BlockingQueue<BaseCommand> commandQueue = new ArrayBlockingQueue<>(100);
+        BlockingQueue<BaseCommand> commandQueue = new ArrayBlockingQueue<>(1024);
 
         logger.info("Starting server on port 4444");
         Server server = new Server(commandQueue);
@@ -49,12 +49,12 @@ public class MainFX extends Application {
         commandConsumer.start();
         logger.info("Command consumer started");
 
-        scene.setCursor(Cursor.NONE);
+        //scene.setCursor(Cursor.NONE);
 
         stage.sizeToScene();
         stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setFullScreen(true);
+        stage.setMaximized(false);
+        stage.setFullScreen(false);
         stage.requestFocus();
         stage.show();
     }

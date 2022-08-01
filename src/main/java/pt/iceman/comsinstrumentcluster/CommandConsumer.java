@@ -8,7 +8,7 @@ import pt.iceman.middleware.cars.BaseCommand;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 
-public class CommandConsumer extends Thread{
+public class CommandConsumer extends Thread {
     private static final Logger logger = LogManager.getLogger(CommandConsumer.class);
 
     private Dashboard dashboard;
