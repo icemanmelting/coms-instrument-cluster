@@ -42,8 +42,11 @@ public class KadettDashboard extends Dashboard {
     private SubScene subscene;
     private boolean ignition;
 
+    private ExecutorService executorService;
+
     public KadettDashboard() {
         super();
+        executorService = Executors.newCachedThreadPool();
         this.ignition = false;
         this.temperatureFuelMapping = new HashMap<>(2) {{
             put(1, new Image(Objects.requireNonNull(getClass().getResourceAsStream("/temperatureWarning.jpg"))));
@@ -499,33 +502,39 @@ public class KadettDashboard extends Dashboard {
     }
 
     @Override
-    public <T extends BaseCommand> void applyCommand(T baseCommand) throws ExecutionException, InterruptedException {
-        super.applyCommand(baseCommand);
+    public <T extends BaseCommand> void applyCommand(T baseCommand) {
+        executorService.submit(() -> {
+            try {
+                super.applyCommand(baseCommand);
 
-        ICEBased iceBased = (ICEBased) baseCommand;
-        setOilPressure(iceBased.isOilPressureLow());
-        setSparkPlug(iceBased.isSparkPlugOn());
-        setRpm(iceBased.getRpm());
-        setFuel(iceBased.getFuelLevel());
-        setTemp(iceBased.getEngineTemperature());
+                ICEBased iceBased = (ICEBased) baseCommand;
+                setOilPressure(iceBased.isOilPressureLow());
+                setSparkPlug(iceBased.isSparkPlugOn());
+                setRpm(iceBased.getRpm());
+                setFuel(iceBased.getFuelLevel());
+                setTemp(iceBased.getEngineTemperature());
 
-        if (state == null) {
-            if (ignition) {
-                state = new IgnitionOn();
-            } else {
-                state = new IgnitionOff();
+                if (state == null) {
+                    if (ignition) {
+                        state = new IgnitionOn();
+                    } else {
+                        state = new IgnitionOff();
+                    }
+                }
+
+                if (iceBased.isIgnition() && !ignition) {
+                    state.transitState();
+                    state = new IgnitionOn();
+                } else if (!iceBased.isIgnition() && ignition) {
+                    state.transitState();
+                    state = new IgnitionOff();
+                }
+
+                ignition = iceBased.isIgnition();
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        }
-
-        if (iceBased.isIgnition() && !ignition) {
-            state.transitState();
-            state = new IgnitionOn();
-        } else if (!iceBased.isIgnition() && ignition) {
-            state.transitState();
-            state = new IgnitionOff();
-        }
-
-        ignition = iceBased.isIgnition();
+        });
     }
 
     private static class ScreenOn implements ScreenState {
@@ -567,7 +576,7 @@ public class KadettDashboard extends Dashboard {
             screenState = new ScreenOn().transitState();
             screenState.get();
 
-           // Thread.sleep(6000);
+            // Thread.sleep(6000);
 
             animateStart(camera);
         }
@@ -587,7 +596,7 @@ public class KadettDashboard extends Dashboard {
                     logger.error("Problem turning display power off", e);
                 }
 
-               return true;
+                return true;
             });
         }
 

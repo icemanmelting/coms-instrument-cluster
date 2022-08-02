@@ -251,18 +251,13 @@ public abstract class Dashboard extends Screen {
     public void configureInstruments() {}
 
     public <T extends BaseCommand> void applyCommand(T baseCommand) throws ExecutionException, InterruptedException {
-        new Runnable() {
-            @Override
-            public void run() {
-                setBattery(baseCommand.isBattery12vNotCharging());
-                setParking(baseCommand.isParkingBrakeOn());
-                setBrakesOil(baseCommand.isBrakesHydraulicFluidLevelLow());
-                setTurnSigns(baseCommand.isTurningSigns());
-                setAbs(baseCommand.isAbsAnomaly());
-                setHighBeams(baseCommand.isHighBeamOn());
-                setSpeed(baseCommand.getSpeed());
-                setTotalDistance(baseCommand.getTotalDistance());
-            }
-        }.run();
+        setBattery(baseCommand.isBattery12vNotCharging());
+        setParking(baseCommand.isParkingBrakeOn());
+        setBrakesOil(baseCommand.isBrakesHydraulicFluidLevelLow());
+        setTurnSigns(baseCommand.isTurningSigns());
+        setAbs(baseCommand.isAbsAnomaly());
+        setHighBeams(baseCommand.isHighBeamOn());
+        setSpeed(baseCommand.getSpeed());
+        setTotalDistance(baseCommand.getTotalDistance());
     }
 }
