@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.Screen;
 import pt.iceman.middleware.cars.BaseCommand;
+import pt.iceman.middleware.cars.SimpleCommand;
 
 import java.util.concurrent.ExecutionException;
 
@@ -250,14 +251,34 @@ public abstract class Dashboard extends Screen {
 
     public void configureInstruments() {}
 
-    public <T extends BaseCommand> void applyCommand(T baseCommand) throws ExecutionException, InterruptedException {
-        setBattery(baseCommand.isBattery12vNotCharging());
-        setParking(baseCommand.isParkingBrakeOn());
-        setBrakesOil(baseCommand.isBrakesHydraulicFluidLevelLow());
-        setTurnSigns(baseCommand.isTurningSigns());
-        setAbs(baseCommand.isAbsAnomaly());
-        setHighBeams(baseCommand.isHighBeamOn());
-        setSpeed(baseCommand.getSpeed());
-        setTotalDistance(baseCommand.getTotalDistance());
+    public void applyCommand(SimpleCommand baseCommand) throws ExecutionException, InterruptedException {
+        switch (baseCommand.getType()) {
+            case "battery":
+                setBattery((boolean) baseCommand.getValue());
+                break;
+            case "parking":
+                setParking((boolean) baseCommand.getValue());
+                break;
+            case "brakes":
+                setBrakesOil((boolean) baseCommand.getValue());
+                break;
+            case "turn-signs":
+                setTurnSigns((boolean) baseCommand.getValue());
+                break;
+            case "abs":
+                setAbs((boolean) baseCommand.getValue());
+                break;
+            case "high-beams":
+                setHighBeams((boolean) baseCommand.getValue());
+                break;
+            case "speed":
+                setSpeed((double) baseCommand.getValue());
+                break;
+            case "total-distance":
+                setTotalDistance((double) baseCommand.getValue());
+                break;
+            default:
+                break;
+        }
     }
 }

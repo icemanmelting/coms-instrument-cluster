@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.dashboard.KadettDashboard;
 import pt.iceman.comsinstrumentcluster.screen.ScreenLoader;
 import pt.iceman.middleware.cars.BaseCommand;
+import pt.iceman.middleware.cars.SimpleCommand;
 
 import java.net.SocketException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -37,7 +38,7 @@ public class MainFX extends Application {
         ScreenLoader.load(root, kadettDashboard);
 
         logger.info("Initializing command queue");
-        BlockingQueue<BaseCommand> commandQueue = new ArrayBlockingQueue<>(1024);
+        BlockingQueue<SimpleCommand> commandQueue = new ArrayBlockingQueue<>(1024);
 
         logger.info("Starting server on port 4444");
         Server server = new Server(commandQueue);
@@ -49,12 +50,12 @@ public class MainFX extends Application {
         commandConsumer.start();
         logger.info("Command consumer started");
 
-        scene.setCursor(Cursor.NONE);
+        //scene.setCursor(Cursor.NONE);
 
         stage.sizeToScene();
         stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setFullScreen(true);
+        stage.setMaximized(false);
+        stage.setFullScreen(false);
         stage.requestFocus();
         stage.show();
     }

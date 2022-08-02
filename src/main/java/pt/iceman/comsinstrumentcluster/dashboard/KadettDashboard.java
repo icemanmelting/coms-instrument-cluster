@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.CustomEntry;
 import pt.iceman.middleware.cars.BaseCommand;
+import pt.iceman.middleware.cars.SimpleCommand;
 import pt.iceman.middleware.cars.ice.ICEBased;
 
 import java.io.IOException;
@@ -502,18 +503,26 @@ public class KadettDashboard extends Dashboard {
     }
 
     @Override
-    public <T extends BaseCommand> void applyCommand(T baseCommand) {
-        executorService.submit(() -> {
-            try {
-                super.applyCommand(baseCommand);
-
-                ICEBased iceBased = (ICEBased) baseCommand;
-                setOilPressure(iceBased.isOilPressureLow());
-                setSparkPlug(iceBased.isSparkPlugOn());
-                setRpm(iceBased.getRpm());
-                setFuel(iceBased.getFuelLevel());
-                setTemp(iceBased.getEngineTemperature());
-
+    public void applyCommand(SimpleCommand baseCommand) throws ExecutionException, InterruptedException {
+       super.applyCommand(baseCommand);
+        switch (baseCommand.getType()) {
+            case "oil-pressure":
+                setOilPressure((boolean) baseCommand.getValue());
+                break;
+            case "spark-plug":
+                setSparkPlug((boolean) baseCommand.getValue());
+                break;
+            case "rpm":
+                setRpm((int) baseCommand.getValue());
+                break;
+            case "fuel":
+                setFuel((double) baseCommand.getValue());
+                break;
+            case "temp":
+                setTemp((double) baseCommand.getValue());
+                break;
+            case "ignition":
+                boolean currignition = (boolean) baseCommand.getValue();
                 if (state == null) {
                     if (ignition) {
                         state = new IgnitionOn();
@@ -522,19 +531,19 @@ public class KadettDashboard extends Dashboard {
                     }
                 }
 
-                if (iceBased.isIgnition() && !ignition) {
+                if (currignition && !ignition) {
                     state.transitState();
                     state = new IgnitionOn();
-                } else if (!iceBased.isIgnition() && ignition) {
+                } else if (!currignition && ignition) {
                     state.transitState();
                     state = new IgnitionOff();
                 }
 
-                ignition = iceBased.isIgnition();
-            } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+                ignition = currignition;
+                break;
+            default:
+                break;
+        }
     }
 
     private static class ScreenOn implements ScreenState {
