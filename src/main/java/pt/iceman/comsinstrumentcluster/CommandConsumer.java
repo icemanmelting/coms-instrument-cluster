@@ -43,7 +43,7 @@ public class CommandConsumer extends Thread {
               .forEach(baseCommand -> {
                   commandMap.put(baseCommand.getType(), baseCommand);
 
-                  if(counter.get() > 50) {
+                  if(counter.get() > 14) {
                       Platform.runLater(() -> {
                           final Map<String, SimpleCommand> commandMap2 = new HashMap<>(commandMap);
                           commandMap2.values().stream().forEach(baseCommand1 -> {
