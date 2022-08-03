@@ -2,27 +2,21 @@ package pt.iceman.comsinstrumentcluster;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pt.iceman.middleware.cars.BaseCommand;
 import pt.iceman.middleware.cars.SimpleCommand;
 
-import java.beans.SimpleBeanInfo;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 
 public class Server extends Thread {
     private static final Logger logger = LogManager.getLogger(CommandConsumer.class);
     private BlockingQueue<SimpleCommand> commandQueue;
 
-    private Server() throws SocketException {
+    private Server() {
     }
 
-    public Server(BlockingQueue<SimpleCommand> commandQueue) throws SocketException {
+    public Server(BlockingQueue<SimpleCommand> commandQueue) {
         this();
         this.commandQueue = commandQueue;
     }
@@ -30,7 +24,6 @@ public class Server extends Thread {
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(4444)) {
             logger.info("Server is listening on port 4444");
-
             while (true) {
                 Socket socket = serverSocket.accept();
                 socket.setTcpNoDelay(true);
@@ -38,21 +31,11 @@ public class Server extends Thread {
                 socket.setReuseAddress(true);
                 logger.info("Client connected");
 
-                InputStream inputStream = socket.getInputStream();
-                ObjectInputStream ois = new ObjectInputStream(inputStream);
-                try {
-                    while (true) {
-                        SimpleCommand baseCommand = (SimpleCommand) ois.readObject();
-                        commandQueue.add(baseCommand);
-                    }
-                } catch (Exception e) {
-                    logger.error("Problem reading from client!");
-                    inputStream.close();
-                }
+                ClientHandler clientHandler = new ClientHandler(socket, commandQueue);
+                clientHandler.start();
             }
-
         } catch (IOException ex) {
-            System.out.println("Server exception: " + ex.getMessage());
+            logger.error("Server exception: " + ex.getMessage());
             ex.printStackTrace();
         }
     }

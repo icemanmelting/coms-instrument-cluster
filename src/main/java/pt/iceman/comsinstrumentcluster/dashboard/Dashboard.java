@@ -100,11 +100,8 @@ public abstract class Dashboard extends Screen {
 
     public void setRpm(double rpm) {
         this.rpm = rpm;
-
-        Platform.runLater(() -> {
-            this.rpmGauge.setValue(rpm);
-            logger.debug("Set rpm value {}", rpm);
-        });
+        this.rpmGauge.setValue(rpm);
+        logger.debug("Set rpm value {}", rpm);
     }
 
     public synchronized double getTotalDistance() {
@@ -113,11 +110,8 @@ public abstract class Dashboard extends Screen {
 
     public synchronized void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
-
-        Platform.runLater(() -> {
-            this.totalDistanceLcd.setValue(totalDistance);
-            logger.debug("Set total distance {}", totalDistance);
-        });
+        this.totalDistanceLcd.setValue(totalDistance);
+        logger.debug("Set total distance {}", totalDistance);
     }
 
     public double getTemp() {
@@ -126,11 +120,8 @@ public abstract class Dashboard extends Screen {
 
     public void setTemp(double temp) {
         this.temp = temp;
-
-        Platform.runLater(() -> {
-            this.tempGauge.setValue(temp);
-            logger.debug("Set temperature {}", temp);
-        });
+        this.tempGauge.setValue(temp);
+        logger.debug("Set temperature {}", temp);
     }
 
     public double getFuel() {
@@ -139,10 +130,8 @@ public abstract class Dashboard extends Screen {
 
     public void setFuel(double fuel) {
         this.fuel = fuel;
-        Platform.runLater(() -> {
-            this.fuelGauge.setValue(fuel);
-            logger.debug("Set fuel {}", fuelGauge);
-        });
+        this.fuelGauge.setValue(fuel);
+        logger.debug("Set fuel {}", fuelGauge);
     }
 
     public boolean isBrakesOil() {
@@ -151,10 +140,8 @@ public abstract class Dashboard extends Screen {
 
     public void setBrakesOil(boolean brakesOil) {
         this.brakesOil = brakesOil;
-        Platform.runLater(() -> {
-            this.brakesOilImageView.setVisible(brakesOil);
-            logger.debug("Set brakes oil {}", brakesOil);
-        });
+        this.brakesOilImageView.setVisible(brakesOil);
+        logger.debug("Set brakes oil {}", brakesOil);
     }
 
     public boolean isBattery() {
@@ -163,10 +150,8 @@ public abstract class Dashboard extends Screen {
 
     public void setBattery(boolean battery) {
         this.battery = battery;
-        Platform.runLater(() -> {
-            this.batteryImageView.setVisible(battery);
-            logger.debug("Set battery {}", battery);
-        });
+        this.batteryImageView.setVisible(battery);
+        logger.debug("Set battery {}", battery);
     }
 
     public boolean isAbs() {
@@ -175,10 +160,8 @@ public abstract class Dashboard extends Screen {
 
     public void setAbs(boolean abs) {
         this.abs = abs;
-        Platform.runLater(() -> {
-            this.absImageView.setVisible(abs);
-            logger.debug("Set ABS {}", abs);
-        });
+        this.absImageView.setVisible(abs);
+        logger.debug("Set ABS {}", abs);
     }
 
     public boolean isParking() {
@@ -187,10 +170,8 @@ public abstract class Dashboard extends Screen {
 
     public void setParking(boolean parking) {
         this.parking = parking;
-        Platform.runLater(() -> {
-            this.parkingImageView.setVisible(parking);
-            logger.debug("Set parking {}", parking);
-        });
+        this.parkingImageView.setVisible(parking);
+        logger.debug("Set parking {}", parking);
     }
 
     public boolean isHighBeams() {
@@ -199,10 +180,8 @@ public abstract class Dashboard extends Screen {
 
     public void setHighBeams(boolean highBeams) {
         this.highBeams = highBeams;
-        Platform.runLater(() -> {
-            this.highBeamsImageView.setVisible(highBeams);
-            logger.debug("Set highbeams {}", highBeams);
-        });
+        this.highBeamsImageView.setVisible(highBeams);
+        logger.debug("Set highbeams {}", highBeams);
     }
 
     public boolean isOilPressure() {
@@ -211,10 +190,8 @@ public abstract class Dashboard extends Screen {
 
     public void setOilPressure(boolean oilPressure) {
         this.oilPressure = oilPressure;
-        Platform.runLater(() -> {
-            this.oilPressureImageView.setVisible(oilPressure);
-            logger.debug("Set oil pressure {}", oilPressure);
-        });
+        this.oilPressureImageView.setVisible(oilPressure);
+        logger.debug("Set oil pressure {}", oilPressure);
     }
 
     public boolean isSparkPlug() {
@@ -223,10 +200,8 @@ public abstract class Dashboard extends Screen {
 
     public void setSparkPlug(boolean sparkPlug) {
         this.sparkPlug = sparkPlug;
-        Platform.runLater(() -> {
-            this.sparkPlugImageView.setVisible(sparkPlug);
-            logger.debug("Set spark plug {}", sparkPlug);
-        });
+        this.sparkPlugImageView.setVisible(sparkPlug);
+        logger.debug("Set spark plug {}", sparkPlug);
     }
 
     public boolean isTurnSigns() {
@@ -235,18 +210,14 @@ public abstract class Dashboard extends Screen {
 
     public void setTurnSigns(boolean turnSigns) {
         this.turnSigns = turnSigns;
-        Platform.runLater(() -> {
-            this.turningSignsImageView.setVisible(turnSigns);
-            logger.debug("Set turn signs {}", turnSigns);
-        });
+        this.turningSignsImageView.setVisible(turnSigns);
+        logger.debug("Set turn signs {}", turnSigns);
     }
 
     public void setIce(boolean ice) {
         this.ice = ice;
-        Platform.runLater(() -> {
-            this.iceImageView.setVisible(ice);
-            logger.debug("Set ice {}", ice);
-        });
+        this.iceImageView.setVisible(ice);
+        logger.debug("Set ice {}", ice);
     }
 
     public void configureInstruments() {}
