@@ -243,7 +243,7 @@ public abstract class Dashboard extends Screen {
                 setHighBeams((boolean) baseCommand.getValue());
                 break;
             case "speed":
-                setSpeed((double) baseCommand.getValue());
+                setSpeed((long) baseCommand.getValue());
                 break;
             case "total-distance":
                 setTotalDistance((double) baseCommand.getValue());
