@@ -479,9 +479,9 @@ public class KadettDashboard extends Dashboard {
         super.setTemp(temp);
 
         if (temp > 110) {
-            Platform.runLater(() -> tempImageView.setImage(temperatureFuelMapping.get(1)));
+            tempImageView.setImage(temperatureFuelMapping.get(1));
         } else {
-            Platform.runLater(() -> tempImageView.setImage(temperatureFuelMapping.get(2)));
+            tempImageView.setImage(temperatureFuelMapping.get(2));
         }
 
         logger.debug("Temperature set {}", temp);
@@ -492,9 +492,9 @@ public class KadettDashboard extends Dashboard {
         super.setFuel(fuel);
 
         if (fuel <= 6) {
-            Platform.runLater(() -> fuelImageViewer.setImage(temperatureFuelMapping.get(3)));
+            fuelImageViewer.setImage(temperatureFuelMapping.get(3));
         } else {
-            Platform.runLater(() -> fuelImageViewer.setImage(temperatureFuelMapping.get(4)));
+            fuelImageViewer.setImage(temperatureFuelMapping.get(4));
         }
 
         logger.debug("Fuel set {}", fuel);
