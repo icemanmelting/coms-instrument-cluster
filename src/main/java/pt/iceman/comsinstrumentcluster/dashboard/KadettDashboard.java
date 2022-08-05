@@ -20,9 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.screen.AbsolutePositioning;
 import pt.iceman.comsinstrumentcluster.screen.CustomEntry;
-import pt.iceman.middleware.cars.BaseCommand;
 import pt.iceman.middleware.cars.SimpleCommand;
-import pt.iceman.middleware.cars.ice.ICEBased;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -551,10 +549,13 @@ public class KadettDashboard extends Dashboard {
 
         public Future<Boolean> transitState() {
             return executor.submit(() -> {
-                ProcessBuilder processBuilder = new ProcessBuilder();
-                processBuilder.command("bash", "-c", "vcgencmd display_power 1");
-                processBuilder.start();
-
+                try {
+                    ProcessBuilder processBuilder = new ProcessBuilder();
+                    processBuilder.command("bash", "-c", "vcgencmd display_power 1");
+                    processBuilder.start();
+                } catch (Exception e) {
+                    logger.error("Problem turning display on");
+                }
                 return true;
             });
         }

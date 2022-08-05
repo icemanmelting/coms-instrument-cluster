@@ -29,8 +29,6 @@ public class CommandConsumer extends Thread {
 
     @Override
     public void run() {
-        final AtomicInteger counter = new AtomicInteger(0);
-        final Map<String, SimpleCommand> commandMap = new HashMap<>();
         Stream.generate(() -> {
                   try {
                       return commandQueue.take();
@@ -41,23 +39,13 @@ public class CommandConsumer extends Thread {
               })
               .filter(Objects::nonNull)
               .forEach(baseCommand -> {
-                  commandMap.put(baseCommand.getType(), baseCommand);
-
-                  if(counter.get() > 14) {
-                      Platform.runLater(() -> {
-                          final Map<String, SimpleCommand> commandMap2 = new HashMap<>(commandMap);
-                          commandMap2.values().stream().forEach(baseCommand1 -> {
-                              try {
-                                  dashboard.applyCommand(baseCommand1);
-                              } catch (InterruptedException | ExecutionException e) {
-                                  logger.error("Problem getting command from command queue", e);
-                              }
-                          });
-                      });
-                      counter.set(0);
-                  }
-
-                  counter.incrementAndGet();
+                  Platform.runLater(() -> {
+                      try {
+                          dashboard.applyCommand(baseCommand);
+                      } catch (ExecutionException | InterruptedException e) {
+                          logger.error("Problem applying command");
+                      }
+                  });
               });
     }
 }
