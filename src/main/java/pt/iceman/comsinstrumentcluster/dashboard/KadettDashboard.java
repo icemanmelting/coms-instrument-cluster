@@ -6,7 +6,6 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.image.Image;
@@ -286,7 +285,7 @@ public class KadettDashboard extends Dashboard {
         brakesOilImageView.toFront();
         brakesOilImageAbsPos = new AbsolutePositioning();
         brakesOilImageAbsPos.setPosX(600);
-        brakesOilImageAbsPos.setPosY(0);
+        brakesOilImageAbsPos.setPosY(50);
         brakesOilImageAbsPos.setWidth(26);
         brakesOilImageAbsPos.setHeight(25);
         brakesOilImageAbsPos.setOrder(10);
@@ -298,7 +297,7 @@ public class KadettDashboard extends Dashboard {
         oilPressureImageView.toFront();
         oilPressureImageAbsPos = new AbsolutePositioning();
         oilPressureImageAbsPos.setPosX(687);
-        oilPressureImageAbsPos.setPosY(0);
+        oilPressureImageAbsPos.setPosY(50);
         oilPressureImageAbsPos.setWidth(26);
         oilPressureImageAbsPos.setHeight(25);
         oilPressureImageAbsPos.setOrder(9);
@@ -310,7 +309,7 @@ public class KadettDashboard extends Dashboard {
         batteryImageView.toFront();
         batteryImageAbsPos = new AbsolutePositioning();
         batteryImageAbsPos.setPosX(774);
-        batteryImageAbsPos.setPosY(0);
+        batteryImageAbsPos.setPosY(50);
         batteryImageAbsPos.setWidth(26);
         batteryImageAbsPos.setHeight(25);
         batteryImageAbsPos.setOrder(11);
@@ -322,7 +321,7 @@ public class KadettDashboard extends Dashboard {
         parkingImageView.toFront();
         parkingImageAbsPos = new AbsolutePositioning();
         parkingImageAbsPos.setPosX(868);
-        parkingImageAbsPos.setPosY(0);
+        parkingImageAbsPos.setPosY(50);
         parkingImageAbsPos.setWidth(26);
         parkingImageAbsPos.setHeight(25);
         parkingImageAbsPos.setOrder(12);
@@ -334,7 +333,7 @@ public class KadettDashboard extends Dashboard {
         highBeamsImageView.toFront();
         highBeamsImageAbsPos = new AbsolutePositioning();
         highBeamsImageAbsPos.setPosX(955);
-        highBeamsImageAbsPos.setPosY(0);
+        highBeamsImageAbsPos.setPosY(50);
         highBeamsImageAbsPos.setWidth(26);
         highBeamsImageAbsPos.setHeight(25);
         highBeamsImageAbsPos.setOrder(13);
@@ -346,7 +345,7 @@ public class KadettDashboard extends Dashboard {
         absImageView.toFront();
         absImageAbsPos = new AbsolutePositioning();
         absImageAbsPos.setPosX(1042);
-        absImageAbsPos.setPosY(0);
+        absImageAbsPos.setPosY(50);
         absImageAbsPos.setWidth(26);
         absImageAbsPos.setHeight(25);
         absImageAbsPos.setOrder(14);
@@ -358,7 +357,7 @@ public class KadettDashboard extends Dashboard {
         sparkPlugImageView.toFront();
         sparkPlugImageAbsPos = new AbsolutePositioning();
         sparkPlugImageAbsPos.setPosX(1129);
-        sparkPlugImageAbsPos.setPosY(0);
+        sparkPlugImageAbsPos.setPosY(50);
         sparkPlugImageAbsPos.setWidth(26);
         sparkPlugImageAbsPos.setHeight(25);
         sparkPlugImageAbsPos.setOrder(15);
@@ -370,7 +369,7 @@ public class KadettDashboard extends Dashboard {
         turningSignsImageView.toFront();
         turningSignsImageAbsPos = new AbsolutePositioning();
         turningSignsImageAbsPos.setPosX(1216);
-        turningSignsImageAbsPos.setPosY(0);
+        turningSignsImageAbsPos.setPosY(50);
         turningSignsImageAbsPos.setWidth(26);
         turningSignsImageAbsPos.setHeight(25);
         turningSignsImageAbsPos.setOrder(16);
@@ -382,7 +381,7 @@ public class KadettDashboard extends Dashboard {
         iceImageView.toFront();
         iceImageAbsPos = new AbsolutePositioning();
         iceImageAbsPos.setPosX(1303);
-        iceImageAbsPos.setPosY(0);
+        iceImageAbsPos.setPosY(50);
         iceImageAbsPos.setWidth(26);
         iceImageAbsPos.setHeight(25);
         iceImageAbsPos.setOrder(17);
