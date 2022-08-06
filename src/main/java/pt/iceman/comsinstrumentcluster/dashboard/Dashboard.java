@@ -87,11 +87,8 @@ public abstract class Dashboard extends Screen {
 
     public synchronized void setSpeed(double speed) {
         this.speed = speed;
-
-        Platform.runLater(() -> {
-            this.speedGauge.setValue(speed);
-            logger.debug("Set speed value {}", speed);
-        });
+        this.speedGauge.setValue(speed);
+        logger.debug("Set speed value {}", speed);
     }
 
     public Double getRpm() {
