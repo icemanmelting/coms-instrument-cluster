@@ -57,7 +57,7 @@ public class MainFX extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setFullScreen(true);
-	stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.requestFocus();
         stage.show();
     }

@@ -547,16 +547,7 @@ public class KadettDashboard extends Dashboard {
         private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
         public Future<Boolean> transitState() {
-            return executor.submit(() -> {
-                try {
-                    ProcessBuilder processBuilder = new ProcessBuilder();
-                    processBuilder.command("bash", "-c", "vcgencmd display_power 1");
-                    processBuilder.start();
-                } catch (Exception e) {
-                    logger.error("Problem turning display on");
-                }
-                return true;
-            });
+            return executor.submit(() -> true);
         }
 
         public void stop() {
@@ -585,7 +576,7 @@ public class KadettDashboard extends Dashboard {
             screenState = new ScreenOn().transitState();
             screenState.get();
 
-            // Thread.sleep(6000);
+            Thread.sleep(2000);
 
             animateStart(camera);
         }
@@ -599,10 +590,10 @@ public class KadettDashboard extends Dashboard {
                 try {
                     Thread.sleep(5000);
                     ProcessBuilder processBuilder = new ProcessBuilder();
-                    processBuilder.command("bash", "-c", "vcgencmd display_power 0");
+                    processBuilder.command("bash", "-c", "sudo /root/suspend.sh");
                     processBuilder.start();
                 } catch (InterruptedException | IOException e) {
-                    logger.error("Problem turning display power off", e);
+                    logger.error("Problem suspending computer", e);
                 }
 
                 return true;
