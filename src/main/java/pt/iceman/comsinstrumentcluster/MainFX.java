@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.input.KeyCombination;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pt.iceman.comsinstrumentcluster.dashboard.KadettDashboard;
@@ -56,6 +57,7 @@ public class MainFX extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setFullScreen(true);
+	stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.requestFocus();
         stage.show();
     }
