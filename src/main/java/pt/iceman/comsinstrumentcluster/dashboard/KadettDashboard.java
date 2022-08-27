@@ -592,6 +592,17 @@ public class KadettDashboard extends Dashboard {
                     ProcessBuilder processBuilder = new ProcessBuilder();
                     processBuilder.command("bash", "-c", "sudo /root/suspend.sh");
                     processBuilder.start();
+
+                    int count = 0;
+
+                    while (count < 15) {
+                        processBuilder.command("bash", "-c", "/home/iceman/Desktop/scripts/screenOff.sh");
+                        processBuilder.start();
+
+                        Thread.sleep(1000);
+                        count++;
+                    }
+
                 } catch (InterruptedException | IOException e) {
                     logger.error("Problem suspending computer", e);
                 }
