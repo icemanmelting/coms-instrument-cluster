@@ -595,11 +595,11 @@ public class KadettDashboard extends Dashboard {
 
                     int count = 0;
 
-                    while (count < 15) {
+                    while (count < 50) {
                         processBuilder.command("bash", "-c", "/home/iceman/Desktop/scripts/screenOff.sh");
                         processBuilder.start();
 
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                         count++;
                     }
 
