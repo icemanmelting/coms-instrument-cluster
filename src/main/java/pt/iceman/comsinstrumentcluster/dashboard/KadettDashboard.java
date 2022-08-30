@@ -58,7 +58,7 @@ public class KadettDashboard extends Dashboard {
         this.camera = new PerspectiveCamera(true);
         this.camera.setFieldOfView(45);
         this.camera.getTransforms().addAll(
-                new Rotate(90, new Point3D(-0.2505628070857316, -0.9351131265310294, -0.25056280708573153)),
+                new Rotate(40, new Point3D(-0.5005628070857316, -1.35, -0.15056280708573153)),
                 new Rotate(0, Rotate.Y_AXIS),
                 new Rotate(0, Rotate.Z_AXIS),
                 new Translate(0, -10, 0),
@@ -425,7 +425,7 @@ public class KadettDashboard extends Dashboard {
         RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
         rt.setCycleCount(1);
         rt.setAxis(Rotate.Y_AXIS);
-        rt.setByAngle(-93);
+        rt.setByAngle(-143);
         rt.setInterpolator(Interpolator.LINEAR);
 
         TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
@@ -442,7 +442,7 @@ public class KadettDashboard extends Dashboard {
         RotateTransition rt = new RotateTransition(Duration.seconds(1), camera);
         rt.setCycleCount(1);
         rt.setAxis(Rotate.Y_AXIS);
-        rt.setByAngle(93);
+        rt.setByAngle(143);
         rt.setInterpolator(Interpolator.LINEAR);
 
         TranslateTransition tt = new TranslateTransition(Duration.seconds(1), camera);
@@ -459,7 +459,7 @@ public class KadettDashboard extends Dashboard {
         Group modelRoot = new Group();
 
         TdsModelImporter importer = new TdsModelImporter();
-        importer.read(getClass().getClassLoader().getResource("Opel_Kadett_E_Hatchback_3door_1991.3ds"));
+        importer.read(getClass().getClassLoader().getResource("Opel_Kadett_E_Hatchback_5door_1991.3ds"));
 
         Node[] meshes = importer.getImport();
 
@@ -592,17 +592,6 @@ public class KadettDashboard extends Dashboard {
                     ProcessBuilder processBuilder = new ProcessBuilder();
                     processBuilder.command("bash", "-c", "sudo /root/suspend.sh");
                     processBuilder.start();
-
-                    int count = 0;
-
-                    while (count < 50) {
-                        processBuilder.command("bash", "-c", "/home/iceman/Desktop/scripts/screenOff.sh");
-                        processBuilder.start();
-
-                        Thread.sleep(500);
-                        count++;
-                    }
-
                 } catch (InterruptedException | IOException e) {
                     logger.error("Problem suspending computer", e);
                 }
